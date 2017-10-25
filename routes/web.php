@@ -15,10 +15,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes(
-
-
-  
-);
+Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/Empresa', 'EmpresaController@Empresa')->name('Empresa');
+Route::get('/CrearTarjeta', 'EmpresaController@CrearTarjeta')->name('CrearTarjeta');
+Route::get('/MisTarjetas', 'EmpresaController@MisTarjetas')->name('MisTarjetas');

@@ -26,6 +26,12 @@
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">
+
+    <!-- Javascript -->
+    <script src="js/jquery-1.11.1.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="bootstrap/js/bootstrapvalidator.min.js"></script>
+    <script src="js/jquery.backstretch.min.js"></script>
 </head>
 <body>
     <div id="app">
@@ -42,9 +48,15 @@
                     </button>
 
                     <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ url('/') }}">
-                      Inicio
-                    </a>
+                    @auth
+                        <a class="navbar-brand" href="{{ url('/home') }}">
+                          Home
+                        </a>
+                    @else
+                        <a class="navbar-brand" href="{{ url('/') }}">
+                          Inicio
+                        </a>
+                    @endauth
                 </div>
 
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
@@ -83,16 +95,7 @@
                 </div>
             </div>
         </nav>
-
         @yield('content')
     </div>
-
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
-    <!-- Javascript -->
-    <script src="js/jquery-1.11.1.min.js"></script>
-    <script src="bootstrap/js/bootstrap.min.js"></script>
-    <script src="js/jquery.backstretch.min.js"></script>
-    <script src="js/scripts.js"></script>
 </body>
 </html>
