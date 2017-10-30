@@ -24,9 +24,7 @@
   <!-- Text input-->
   <div class="col-lg-6 col-md-6 col-sm-6">
     <div class="form-group">
-      <a id="Cambio" href="#">
-        <output id="list"><img src="/img/companyDefault.png" alt="Compañia" height="142" width="142" class="img-rounded"></output>
-      </a>
+      <a  id="archivobtn" type="button" value="Seleccionearchivo" ><output id="list"><img src="/img/companyDefault.png" alt="Compañia" height="142" width="142" class="img-rounded"></output></a>
     </div>
   </div>
 
@@ -36,8 +34,7 @@
     </div>
   </div>
 
-  <input type="file" id="files" name="files" style="" />
-  <input type="file" id="files2" name="files2" style="" />
+  <input type="file" id="files" name="files" style="display:none;" />
 </div>
 
 <!-- Button -->
@@ -200,9 +197,9 @@
 
       document.getElementById('files').addEventListener('change', archivo, false);
 
-      $('#Cambio').click(function() {
-        $('input[type="files2"]').click();
-        console.log(2);
+
+      $('#archivobtn').click(function () {
+          $("#files").click();
       });
     </script>
 @endsection
