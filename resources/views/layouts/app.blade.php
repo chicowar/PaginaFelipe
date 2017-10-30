@@ -32,6 +32,26 @@
     <script src="bootstrap/js/bootstrap.min.js"></script>
     <script src="bootstrap/js/bootstrapvalidator.min.js"></script>
     <script src="js/jquery.backstretch.min.js"></script>
+
+
+    <!-- Firebase -->
+
+    <script src="https://www.gstatic.com/firebasejs/4.6.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyD7fnd4lstP7klHMW8kpGFAtI0iYWWcodg",
+    authDomain: "felipe-29121.firebaseapp.com",
+    databaseURL: "https://felipe-29121.firebaseio.com",
+    projectId: "felipe-29121",
+    storageBucket: "felipe-29121.appspot.com",
+    messagingSenderId: "428661649011"
+  };
+  firebase.initializeApp(config);
+</script>
+
+
+
 </head>
 <body>
     <div id="app">
