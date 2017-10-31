@@ -25,6 +25,7 @@
   <div class="col-lg-6 col-md-6 col-sm-6">
     <div class="form-group">
       <a  id="archivobtn" type="button" value="Seleccionearchivo" ><output id="list"><img src="/img/companyDefault.png" alt="Compañia" height="142" width="142" class="img-rounded"></output></a>
+      <progress id="uploader" value="0" max="100">0%</progress>
     </div>
   </div>
 
@@ -34,6 +35,8 @@
     </div>
   </div>
 
+
+  <input type="text" id="empresauid" name="empresauid" value="{{ Auth::user()->id_compania }}" style="display:none;" />
   <input type="file" id="files" name="files" style="display:none;" />
 </div>
 
@@ -41,136 +44,68 @@
 <div class="form-group">
   <label class="col-md-4 control-label"></label>
   <div class="col-md-4">
-    <button type="submit" class="btn btn-warning" >Send <span class="glyphicon glyphicon-send"></span></button>
+    <button type="button" onclick="storagenew()" class="btn btn-warning" >Guardar Cambios <span class="glyphicon glyphicon-send"></span></button>
   </div>
 </div>
+
+
 
 </fieldset>
 </form>
     </div><!-- /.container -->
 
+    <script src="https://www.gstatic.com/firebasejs/4.6.0/firebase.js"></script>
+
     <script type="text/javascript">
+
+    var config = {
+      apiKey: "AIzaSyD7fnd4lstP7klHMW8kpGFAtI0iYWWcodg",
+      authDomain: "felipe-29121.firebaseapp.com",
+      databaseURL: "https://felipe-29121.firebaseio.com",
+      projectId: "felipe-29121",
+      storageBucket: "felipe-29121.appspot.com",
+      messagingSenderId: "428661649011"
+    };
+    firebase.initializeApp(config);
+
+    function updatefirebase(userId){
+      firebase.database().ref('Users/' + userId).set({
+         username: 'jona',
+         email: 'Super',
+         profile_picture : 'cayoquen'
+       });
+
+       console.log(2);
+    }
+
+    function storagenew(){
+
+
+      console.log(4)
+    }
+
+    var uploader = document.getElementById('uploader');
+    var fileButton =         document.getElementById('files');
+    var Empresauid = document.getElementById('empresauid').value;
+    fileButton.addEventListener('change', function(e){
+    var file = e.target.files[0];
+    var storageRef = firebase.storage().ref('Empresa/'+Empresauid+'/'+file.name);
+    var task = storageRef.put(file);
+    task.on('state_changed', function progress(snapshot) {
+      var percentage = (snapshot.bytesTransferred/snapshot.totalBytes)*100;
+      uploader.value = percentage;
+
+    }, function error(err) {
+
+
+    },function complete() {
+
+    });
+    });
+
     $(document).ready(function() {
- $('#contact_form').bootstrapValidator({
-     // To use feedback icons, ensure that you use Bootstrap v3.1.0 or later
-     feedbackIcons: {
-         valid: 'glyphicon glyphicon-ok',
-         invalid: 'glyphicon glyphicon-remove',
-         validating: 'glyphicon glyphicon-refresh'
-     },
-     fields: {
-         first_name: {
-             validators: {
-                     stringLength: {
-                     min: 2,
-                 },
-                     notEmpty: {
-                     message: 'Please supply your first name'
-                 }
-             }
-         },
-          last_name: {
-             validators: {
-                  stringLength: {
-                     min: 2,
-                 },
-                 notEmpty: {
-                     message: 'Please supply your last name'
-                 }
-             }
-         },
-         email: {
-             validators: {
-                 notEmpty: {
-                     message: 'Please supply your email address'
-                 },
-                 emailAddress: {
-                     message: 'Please supply a valid email address'
-                 }
-             }
-         },
-         phone: {
-             validators: {
-                 notEmpty: {
-                     message: 'Please supply your phone number'
-                 },
-                 phone: {
-                     country: 'US',
-                     message: 'Please supply a vaild phone number with area code'
-                 }
-             }
-         },
-         address: {
-             validators: {
-                  stringLength: {
-                     min: 8,
-                 },
-                 notEmpty: {
-                     message: 'Please supply your street address'
-                 }
-             }
-         },
-         city: {
-             validators: {
-                  stringLength: {
-                     min: 4,
-                 },
-                 notEmpty: {
-                     message: 'Please supply your city'
-                 }
-             }
-         },
-         state: {
-             validators: {
-                 notEmpty: {
-                     message: 'Please select your state'
-                 }
-             }
-         },
-         zip: {
-             validators: {
-                 notEmpty: {
-                     message: 'Please supply your zip code'
-                 },
-                 zipCode: {
-                     country: 'US',
-                     message: 'Please supply a vaild zip code'
-                 }
-             }
-         },
-         comment: {
-             validators: {
-                   stringLength: {
-                     min: 10,
-                     max: 200,
-                     message:'Please enter at least 10 characters and no more than 200'
-                 },
-                 notEmpty: {
-                     message: 'Please supply a description of your project'
-                 }
-                 }
-             }
-         }
-     })
-     .on('success.form.bv', function(e) {
-         $('#success_message').slideDown({ opacity: "show" }, "slow") // Do something ...
-             $('#contact_form').data('bootstrapValidator').resetForm();
 
-         // Prevent form submission
-         e.preventDefault();
-
-         // Get the form instance
-         var $form = $(e.target);
-
-         // Get the BootstrapValidator instance
-         var bv = $form.data('bootstrapValidator');
-
-         // Use Ajax to submit form data
-         $.post($form.attr('action'), $form.serialize(), function(result) {
-             console.log(result);
-         }, 'json');
-     });
-});
+    });
 
         function archivo(evt) {
               var files = evt.target.files; // FileList object
@@ -196,7 +131,6 @@
         }
 
       document.getElementById('files').addEventListener('change', archivo, false);
-
 
       $('#archivobtn').click(function () {
           $("#files").click();

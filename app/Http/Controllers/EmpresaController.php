@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\User;
 
 class EmpresaController extends Controller
 {
@@ -77,10 +78,18 @@ class EmpresaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        //
-    }
+     public function editarempresa($id,Request $request)
+     {
+
+       $user = Users::findorfail($id);
+
+       $user->archivo = $request->input('files')->getClientOriginalName();
+
+
+       return response()->json([
+         'mensaje' => "listo"
+       ]);
+     }
 
     /**
      * Update the specified resource in storage.
