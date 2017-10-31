@@ -35,8 +35,9 @@
     </div>
   </div>
 
-
+  <input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
   <input type="text" id="empresauid" name="empresauid" value="{{ Auth::user()->id_compania }}" style="display:none;" />
+  <input type="text" id="id" name="id" value="{{ Auth::user()->id }}" style="display:none;" />
   <input type="file" id="files" name="files" style="display:none;" />
 </div>
 
@@ -88,6 +89,23 @@
     var fileButton =         document.getElementById('files');
     var Empresauid = document.getElementById('empresauid').value;
     fileButton.addEventListener('change', function(e){
+      var value = $("#id").val();
+      var route = "/empresa/edit/"+value+"";
+      var token = $("#token").val();
+      var fd = new FormData(document.getElementById("contact_form"));
+
+      $.ajax({
+        url: route,
+        headers: {'X-CSRF_TOKEN': token},
+        type: 'post',
+        data: fd,
+        processData: false,  // tell jQuery not to process the data
+        contentType: false,
+        success: function(){
+        }
+      });
+
+
     var file = e.target.files[0];
     var storageRef = firebase.storage().ref('Empresa/'+Empresauid+'/'+file.name);
     var task = storageRef.put(file);

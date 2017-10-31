@@ -81,10 +81,11 @@ class EmpresaController extends Controller
      public function editarempresa($id,Request $request)
      {
 
-       $user = Users::findorfail($id);
+       $user = User::findorfail($id);
 
-       $user->archivo = $request->input('files')->getClientOriginalName();
-
+       $file = $request->file('files');
+       $user->archivo = $file->getClientOriginalName();
+       $user->save();
 
        return response()->json([
          'mensaje' => "listo"
