@@ -9,7 +9,7 @@
 
                 <div class="panel-body">
                     <form class="form-horizontal" method="POST" action="{{ route('register') }}" id="regform" onsubmit="return NuevoUsuario();">
-                       <input id="uid" type="hidden" class="form-control" name="uid" required>
+                       <input id="id_compania" type="hidden" class="form-control" name="id_compania" value="{{ old('id_compania') }}" required>
                         {{ csrf_field() }}
 
                         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
@@ -82,7 +82,7 @@
 
   <script>
 
-
+/*
     // Initialize Firebase
     var config = {
       apiKey: "AIzaSyD7fnd4lstP7klHMW8kpGFAtI0iYWWcodg",
@@ -93,7 +93,7 @@
       messagingSenderId: "428661649011"
     };
     firebase.initializeApp(config);
-
+*/
   //  var admin = require("firebase-admin");
 function consultar(){
 
@@ -126,51 +126,65 @@ socket.on('chat message', function(msg){
 
 
     function NuevoUsuario(){
-      event.preventDefault();
-      var pass2= $("#password_confirm").val();
-      var pass1= $("#password").val();
-      alert(pass1);
-      alert(pass2);
-      if(pass1!=pass2){
-        document.getElementById("password_confirm").setCustomValidity("Los passwords deben coincidir");
-        return false;
-      }
-      else
-      {
-        document.getElementById("password_confirm").setCustomValidity('');
-      //empty string means no validation error
-      }
+      // detenemos submit
+        event.preventDefault();
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyD7fnd4lstP7klHMW8kpGFAtI0iYWWcodg",
+        authDomain: "felipe-29121.firebaseapp.com",
+        databaseURL: "https://felipe-29121.firebaseio.com",
+        projectId: "felipe-29121",
+        storageBucket: "felipe-29121.appspot.com",
+        messagingSenderId: "428661649011"
+      };
+      firebase.initializeApp(config);
 
+   // borramos si ya existe
+     var empresaId =  $('#id_compania').val();
+     if(empresaId != "")
+     {
+      firebase.database().ref('Empresa/'+empresaId).remove();
+    }
+    // asignamos nuevo valor de id empresa
+      $('#id_compania').val(uniqid());
+      var empresaId =  $('#id_compania').val();
+
+
+
+
+    // validamos formulario
       var formulario = document.getElementById("regform");
         if (formulario.checkValidity()){
-          firebase.auth().createUserWithEmailAndPassword($('#email').val(), $('#password').val()).then(function(user){
-            console.log('uid',user.uid)
-            $('#uid').val(user.uid);
-            formulario.submit();
-            return true;
-            //Here if you want you can sign in the user
-          }).catch(function(error) {
-          // Handle Errors here.
-          var errorCode = error.code;
-          var errorMessage = error.message;
-          // [START_EXCLUDE]
-          if (errorCode === 'auth/wrong-password') {
-            alert('Wrong password.');
-          } else {
-            if (errorMessage == 'The email address is already in use by another account.')
-            alert('Ese correo electronico ya esta registrado');
-          }
-          });
+        // se escribe nodo en empresa
 
-        } else {
-          alert("No se envía el formulario");
-          return false;
+        firebase.database().ref('Empresa/'+empresaId).set(empresaId);
+
+        // se hace submit formulario
+          formulario.submit();
+
         }
+            else {
+              setTimeout(function() {
+                      toastr.options = {
+                          closeButton: true,
+                          progressBar: true,
+                          showMethod: 'slideDown',
+                          timeOut: 4000
+                      };
+                      toastr.error('Valida los que los campos esten completos', 'Usuario no guardado');
+
+                  }, 0);
+           }
+          }
 
 
-    }
-
-
+          function uniqid() {
+              var ts=String(new Date().getTime()), i = 0, out = '';
+              for(i=0;i<ts.length;i+=2) {
+                 out+=Number(ts.substr(i, 2)).toString(36);
+              }
+              return ('d'+out);
+              }
 
   </script>
 
