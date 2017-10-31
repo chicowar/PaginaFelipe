@@ -8,7 +8,8 @@
                 <div class="panel-heading">Register</div>
 
                 <div class="panel-body">
-                    <form class="form-horizontal" method="POST" action="{{ route('register') }}">
+                    <form class="form-horizontal" method="POST" action="{{ route('register') }}" id="regform" onsubmit="return NuevoUsuario();">
+                       <input id="uid" type="hidden" class="form-control" name="uid" required>
                         {{ csrf_field() }}
 
                         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
@@ -43,7 +44,7 @@
                             <label for="password" class="col-md-4 control-label">Password</label>
 
                             <div class="col-md-6">
-                                <input id="password" type="password" class="form-control" name="password" required>
+                                <input id="password" type="password" class="form-control" name="password" minlength="6" required>
 
                                 @if ($errors->has('password'))
                                     <span class="help-block">
@@ -57,18 +58,14 @@
                             <label for="password-confirm" class="col-md-4 control-label">Confirm Password</label>
 
                             <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
+                                <input id="password_confirm" type="password" class="form-control" name="password_confirmation" data-rule-equalTo="#password" required>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
                                 <button type="submit" class="btn btn-primary">
-                                    Register
-                                </button>
-
-                                <button type="button" class="btn btn-primary" onclick="consultar()">
-                                    prueba
+                                    Registrar
                                 </button>
                             </div>
                         </div>
@@ -84,8 +81,6 @@
 <script src="https://www.gstatic.com/firebasejs/4.6.0/firebase.js"></script>
 
   <script>
-//import * as admin from "node_modules/firebase-admin";
-
 
 
     // Initialize Firebase
@@ -128,45 +123,51 @@ socket.on('chat message', function(msg){
     }
 
 
-    function NuevoUsuario(email,password){
-        firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        // [START_EXCLUDE]
-        if (errorCode === 'auth/wrong-password') {
-          alert('Wrong password.');
+
+
+    function NuevoUsuario(){
+      event.preventDefault();
+      var pass2= $("#password_confirm").val();
+      var pass1= $("#password").val();
+      alert(pass1);
+      alert(pass2);
+      if(pass1!=pass2){
+        document.getElementById("password_confirm").setCustomValidity("Los passwords deben coincidir");
+        return false;
+      }
+      else
+      {
+        document.getElementById("password_confirm").setCustomValidity('');
+      //empty string means no validation error
+      }
+
+      var formulario = document.getElementById("regform");
+        if (formulario.checkValidity()){
+          firebase.auth().createUserWithEmailAndPassword($('#email').val(), $('#password').val()).then(function(user){
+            console.log('uid',user.uid)
+            $('#uid').val(user.uid);
+            formulario.submit();
+            return true;
+            //Here if you want you can sign in the user
+          }).catch(function(error) {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          // [START_EXCLUDE]
+          if (errorCode === 'auth/wrong-password') {
+            alert('Wrong password.');
+          } else {
+            if (errorMessage == 'The email address is already in use by another account.')
+            alert('Ese correo electronico ya esta registrado');
+          }
+          });
+
         } else {
-          alert(errorMessage);
+          alert("No se envía el formulario");
+          return false;
         }
 
-        // [END_EXCLUDE]
-      });
 
-
-
-/*
-      admin.auth().getUser('AXJ3paUYG4WI6t4cGasIkcWAIVq2')
-        .then(function(userRecord) {
-          // See the UserRecord reference doc for the contents of userRecord.
-          console.log("Successfully fetched user data:", userRecord.toJSON());
-        })
-        .catch(function(error) {
-          console.log("Error fetching user data:", error);
-        });
-*/
-      firebase.auth().getUserByEmail(email)
-      .then(function(userRecord) {
-        // See the tables above for the contents of userRecord
-        console.log("Successfully fetched user data:", userRecord.toJSON());
-      })
-      .catch(function(error) {
-        console.log("Error fetching user data:", error);
-      });
-
-      console.log('userId');
-
-       console.log(1);
     }
 
 

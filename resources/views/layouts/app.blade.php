@@ -33,6 +33,10 @@
     <script src="bootstrap/js/bootstrapvalidator.min.js"></script>
     <script src="js/jquery.backstretch.min.js"></script>
 
+    <!-- Toastr -->
+    <script src="js/toastr/toastr.min.js"></script>
+    <!-- Toastr style -->
+    <link href="/css/toastr/toastr.min.css" rel="stylesheet">
 
     <!-- Firebase -->
 
