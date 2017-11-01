@@ -145,12 +145,11 @@ socket.on('chat message', function(msg){
      {
       firebase.database().ref('Empresa/'+empresaId).remove();
     }
+
     // asignamos nuevo valor de id empresa
+
       $('#id_compania').val(uniqid());
       var empresaId =  $('#id_compania').val();
-
-
-
 
     // validamos formulario
       var formulario = document.getElementById("regform");
@@ -178,13 +177,13 @@ socket.on('chat message', function(msg){
           }
 
 
-          function uniqid() {
-              var ts=String(new Date().getTime()), i = 0, out = '';
-              for(i=0;i<ts.length;i+=2) {
-                 out+=Number(ts.substr(i, 2)).toString(36);
-              }
-              return ('d'+out);
-              }
+    function uniqid() {
+        var ts=String(new Date().getTime()), i = 0, out = '';
+        for(i=0;i<ts.length;i+=2) {
+           out+=Number(ts.substr(i, 2)).toString(36);
+        }
+        return ('d'+out);
+        }
 
   </script>
 

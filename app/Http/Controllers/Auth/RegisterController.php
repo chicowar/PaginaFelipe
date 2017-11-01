@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use App\Empresa;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -62,6 +63,10 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+
+            Empresa::create([
+              'id_compania' => $data['id_compania'],
+            ]);
 
         return User::create([
             'name' => $data['name'],

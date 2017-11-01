@@ -33,6 +33,29 @@
     <div class="form-group">
       <label class="control-label" ><FONT SIZE=22 color="cian">Compañia</FONT></label>
     </div>
+
+
+  <!-- Text input-->
+
+    <div class="form-group">
+      <label class="col-md-4 control-label">Nombre</label>
+      <div class="col-md-8 inputGroupContainer">
+        <div class="input-group">
+          <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+          <input  name="nombre" id="nombre" placeholder="Nombre de la empresa" class="form-control"  type="text" value="{{$empresa->name}}">
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-4 control-label">Direccion</label>
+        <div class="col-md-8 inputGroupContainer">
+        <div class="input-group">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-home"></i></span>
+      <input name="direccion" id="direccion" placeholder="Domicilio de la empresa" class="form-control" type="text" value="{{$empresa->direccion}}">
+        </div>
+      </div>
+    </div>
   </div>
 
   <input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\User;
+use App\Models\User;
+use App\Models\Empresa;
+use Illuminate\Support\Facades\Auth;
 
 class EmpresaController extends Controller
 {
@@ -20,7 +22,14 @@ class EmpresaController extends Controller
 
     public function Empresa()
     {
-        return view('/Administracion/empresa');
+
+      $user = Auth::user();
+
+      $empresaid = $user->id_compania;
+
+      $empresa = Empresa::where('id_compania','=',$empresaid)->first();
+
+        return view('/Administracion/empresa', compact('empresa'));
     }
 
     public function CrearTarjeta()
