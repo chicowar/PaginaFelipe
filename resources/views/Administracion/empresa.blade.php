@@ -24,7 +24,7 @@
   <!-- Text input-->
   <div class="col-lg-6 col-md-6 col-sm-6">
     <div class="form-group">
-      <a  id="archivobtn" type="button" value="Seleccionearchivo" ><output id="list"><img src="/img/companyDefault.png" alt="Compañia" height="142" width="142" class="img-rounded"></output></a>
+      <a  id="archivobtn" type="button" value="Seleccionearchivo" ><output id="list"><img src="/img/companyDefault.png" alt="Compañia" height="142" width="142" class="img-rounded" id="myimg"></output></a>
       <progress id="uploader" value="0" max="100">0%</progress>
     </div>
   </div>
@@ -38,6 +38,7 @@
   <input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
   <input type="text" id="empresauid" name="empresauid" value="{{ Auth::user()->id_compania }}" style="display:none;" />
   <input type="text" id="id" name="id" value="{{ Auth::user()->id }}" style="display:none;" />
+  <input type="text" id="archivoname" name="archivoname" value="{{ Auth::user()->archivo }}" style="display:none;" />
   <input type="file" id="files" name="files" style="display:none;" />
 </div>
 
@@ -69,6 +70,22 @@
     };
     firebase.initializeApp(config);
 
+    // Create a reference with an initial file path and name
+    var storage = firebase.storage();
+    // Create a reference from a Google Cloud Storage URI
+    var storageRef = storage.refFromURL('gs://felipe-29121.appspot.com/Empresa')
+
+    var hijo = document.getElementById('empresauid').value+'/'+document.getElementById('archivoname').value;
+    storageRef.child(hijo).getDownloadURL().then(function(url) {
+      // `url` is the download URL for 'images/stars.jpg'
+
+    // Or inserted into an <img> element:
+    var img = document.getElementById('myimg');
+    img.src = url;
+    }).catch(function(error) {
+      // Handle any errors
+    });
+
     function updatefirebase(userId){
       firebase.database().ref('Users/' + userId).set({
          username: 'jona',
@@ -78,6 +95,7 @@
 
        console.log(2);
     }
+
 
     function storagenew(){
 
