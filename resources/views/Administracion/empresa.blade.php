@@ -16,7 +16,7 @@
 
 <div class="container">
 
-    <form class="well form-horizontal" action=" " method="post"  id="contact_form">
+<form class="well form-horizontal" action=" " method="post"  id="contact_form">
 <fieldset>
 
 <!-- Form Name -->
@@ -30,9 +30,12 @@
       <a  id="archivobtn" type="button" value="Seleccionearchivo" ><output id="list"><img src="/img/companyDefault.png" alt="Compañia" height="142" width="142" class="img-rounded" id="myimg"></output></a>
       <progress id="uploader" value="0" max="100">0%</progress>
     </div>
+
+  <label class="control-label" id="empresalabel">{{$empresa->name}}</label>
+  <br>
+  <label class="control-label" id="urllabel">{{$empresa->url}}</label>
+
   </div>
-
-
 
   <input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
   <input type="text" id="empresauid" name="empresauid" value="{{ Auth::user()->id_compania }}" style="display:none;" />
@@ -40,18 +43,17 @@
   <input type="text" id="archivoname" name="archivoname" value="{{ Auth::user()->archivo }}" style="display:none;" />
   <input type="file" id="files" name="files" style="display:none;" />
 
-
-
 </form>
 
 <div class="col-lg-6 col-md-6 col-sm-6">
   <div class="form-group">
-    <label class="control-label" ><FONT SIZE=22 color="cian">Compañia</FONT></label>
+    <label class="control-label" ><FONT SIZE=22 color="cian">Compañ&iacute;a</FONT></label>
   </div>
 
 
 <!-- Text input-->
 
+<form class="well form-horizontal" action="/empresa/storeubicacion/1" method="post"  id="empresa_form">
   <div class="form-group">
 
     <br>
@@ -63,31 +65,41 @@
       </div>
     </div>
   </div>
+  <div class="form-group">
+    <label class="col-md-4 control-label">Direcci&oacute;n web</label>
+    <div class="col-md-8 inputGroupContainer">
+      <div class="input-group">
+        <span class="input-group-addon"><i class="glyphicon glyphicon-link"></i></span>
+        <input onkeypress="return pulsar(event)"  name="url" id="url" placeholder="Nombre de la empresa" class="form-control"  type="text" value="{{$empresa->url}}">
+      </div>
+    </div>
+
+  </div>
 
   <div class="form-group">
     <label class="col-md-4 control-label"></label>
     <div class="col-md-4">
-      <button type="button" onclick="guardarnombre()" class="btn btn-warning" >Guardar nombre de empresa <span class="glyphicon glyphicon-send"></span></button>
+      <button type="button" onclick="guardarnombre()" class="btn btn-warning" >Editar nombre y url de empresa <span class="glyphicon glyphicon-send"></span></button>
     </div>
   </div>
 
-
 </div>
+</form>
 </div>
 
 <form class="well form-horizontal" action="/empresa/storeubicacion/1" method="post"  id="ubica_form">
 <div class="row">
   <div class="form-group">
-    <label class="control-label" ><FONT SIZE=22 color="cian">Agregar ubicaci&oacute;n</FONT></label>
+    <label class="control-label" ><FONT SIZE=22 color="cian">Agregar ubicaci&oacute;n de sucursal</FONT></label>
   </div>
   <div class="col-md-10 inputGroupContainer">
     <div class="col-md-4">
-    <label class="col-md-12 control-label">Buscar ubicacion</label>
-    <label class="col-md-12 control-label">Ubicacion actual del puntero</label>
+    <label class="col-md-12 control-label">Buscar ubicaci&oacute;n</label>
+    <label class="col-md-12 control-label">Ubicaci&oacute;n actual del puntero</label>
     </div>
     <div class="input-group">
       <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
-      <input onkeypress="return pulsar(event)"  name="nombre" id="searchmap" placeholder="Busca ubicacion" class="form-control"  type="text" value="" >
+      <input onkeypress="return pulsar(event)"  name="nombre" id="searchmap" placeholder="Busca ubicación" class="form-control"  type="text" value="" >
        <div class="col-md-12" id="address"name="address"></div>
     </div>
   </div>
@@ -102,8 +114,8 @@
 <div class="form-group">
   <label class="col-md-4 control-label"></label>
   <div class="col-md-4">
-    <!--<button type="button" onclick="guardaubicacion()" class="btn btn-warning" >Guardar ubicacion <span class="glyphicon glyphicon-send"></span></button>-->
-    <button type="submit"class="btn btn-warning" >Guardar ubicacion <span class="glyphicon glyphicon-send"></span></button>
+    <button type="button" onclick="guardaubicacion()" class="btn btn-warning" >Agregar ubicaci&oacute;n actual<span class="glyphicon glyphicon-send"></span></button>
+
 
   </div>
 </div>
@@ -157,6 +169,51 @@
     function guardarnombre(){
 
 
+            var value = $("#id").val();
+            var route = "/empresa/storeempresa/"+value+"";
+            var token = $("#token").val();
+            var fd = new FormData(document.getElementById("empresa_form"));
+
+            $.ajax({
+              url: route,
+              headers: {'X-CSRF_TOKEN': token},
+              type: 'post',
+              data: fd,
+              processData: false,  // tell jQuery not to process the data
+              contentType: false,
+              success: function(data){
+                setTimeout(function() {
+                        toastr.options = {
+                            closeButton: true,
+                            progressBar: true,
+                            showMethod: 'slideDown',
+                            timeOut: 5000
+                        };
+                        toastr.success('Se actualizo el nombre de la empresa', 'Cambio realizado');
+
+                    }, 0);
+
+                    alert(data.name);
+                    $('#empresalabel').empty();
+                    $('#empresalabel').append(data.name);
+                    $('#urllabel').empty();
+                    $('#urllabel').append(data.url);
+              },
+              error: function(){
+                setTimeout(function() {
+                        toastr.options = {
+                            closeButton: true,
+                            progressBar: true,
+                            showMethod: 'slideDown',
+                            timeOut: 5000
+                        };
+                        toastr.error('Error en la carga', 'Cambio no realizado');
+
+                    }, 0);
+              }
+            });
+
+
     }
 
     function guardaubicacion(){
@@ -179,13 +236,23 @@
                       closeButton: true,
                       progressBar: true,
                       showMethod: 'slideDown',
-                      timeOut: 4000
+                      timeOut: 5000
                   };
-                  toastr.success('Se ha añadido nueva localizacion', 'Alta de usuario');
+                  toastr.success('Se ha añadido nueva localizacion', 'Alta ubicación');
 
               }, 0);
         },
         error: function(){
+          setTimeout(function() {
+                  toastr.options = {
+                      closeButton: true,
+                      progressBar: true,
+                      showMethod: 'slideDown',
+                      timeOut: 5000
+                  };
+                  toastr.error('Error en la carga', 'Carga de ubicación');
+
+              }, 0);
         }
       });
       }

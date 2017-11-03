@@ -7,7 +7,6 @@ use App\User;
 use App\Models\Empresa;
 use App\Models\empresaubicacion;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class EmpresaController extends Controller
 {
@@ -161,7 +160,9 @@ class EmpresaController extends Controller
 
      $map = app('map')->create_map();
 
-        return view('/Administracion/empresa', compact('empresa','map'));
+     $ubicaciones = empresaubicacion::where('id_compania','=',$empresaid)->get();
+
+        return view('/Administracion/empresa', compact('empresa','map','ubicaciones'));
     }
 
     public function CrearTarjeta()
@@ -175,6 +176,9 @@ class EmpresaController extends Controller
 
         return view('/Administracion/MisTarjetas', compact('abecedario'));
     }
+
+
+
 
     public function index()
     {
@@ -197,9 +201,25 @@ class EmpresaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function storeubicacion($id,Request $request)
     {
         //
+        //return(dd($request));
+        $user = Auth::user();
+        $empresaid = $user->id_compania;
+
+        $tablaempresa= Empresa::where('id_compania','=',$empresaid)->first();
+
+        $empresaubicacion = new empresaubicacion;
+        $empresaubicacion->id_empresas = $tablaempresa->id;
+        $empresaubicacion->id_compania = $empresaid;
+        $empresaubicacion->direccion = $request->direccion;
+        $empresaubicacion->lat = $request->lat;
+        $empresaubicacion->lng = $request->lng;
+
+        $empresaubicacion->save();
+
+
     }
 
     /**
@@ -208,9 +228,20 @@ class EmpresaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function storeempresa($id,Request $request)
     {
         //
+        $user = Auth::user();
+        $empresaid = $user->id_compania;
+
+        Empresa::where('id_compania','=',$empresaid)->update([
+        'name' => $request->nombre,
+        'url' => $request->url
+      ]);
+
+       $empresa = Empresa::where('id_compania','=',$empresaid)->first();
+
+       return($empresa)->tojson();
     }
 
     /**
@@ -233,74 +264,6 @@ class EmpresaController extends Controller
        ]);
      }
 
-     public function usuarioAdmin()
-     {
-       $Users = Auth::user();
-
-       $compañiaid = $Users->id_compania;
-
-       $usuario = DB::table('users')
-       //->leftjoin('areas','areas.id','=','users.id_area')
-       ->select('users.*')
-       ->where('users.id_compania',$Users->id_compania)
-       ->get();
-
-       return view('/Administracion/usuarioAdmin', compact('usuario'));
-     }
-
-     public function Pago()
-     {
-
-       return view('/Administracion/Pago');
-     }
-
-     protected function createAdmin(Request $request)
-     {
-        $user = new User;
-
-        $user->name = $request->input('name');
-        $user->email = $request->input('email');
-        $user->password = bcrypt($request->input('password'));
-        $user->id_compania = $request->input('empresauid');
-        $user->save();
-
-        return redirect('/usuarioAdmin');
-     }
-
-     public function editU($id){
-       $user = User::find($id);
-         return response()->json(
-           $user->toArray()
-         );
-     }
-
-     public function usuariosedit($id,Request $request)
-     {
-       $user = Auth::user();
-       $usuarios = User::findorfail($id);
-
-       //Campos normales
-       if ($request->input('epassword') != null) {
-         $usuarios->password = bcrypt($request->input('epassword'));
-       }
-
-
-       $usuarios->name = $request->input('enombre');
-       $usuarios->email = $request->input('eemail');
-       $usuarios->save();
-       return redirect('/usuarioAdmin');
-     }
-
-     public function destroyU($id)
-     {
-       $usuarios = Auth::user();
-       $user = User::findorfail($id);
-       $user-> delete();
-
-
-       return redirect('/usuarioAdmin');
-
-     }
     /**
      * Update the specified resource in storage.
      *
