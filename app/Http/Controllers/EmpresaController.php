@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
+use App\User;
 use App\Models\Empresa;
+use App\Models\empresaubicacion;
 use Illuminate\Support\Facades\Auth;
 
 class EmpresaController extends Controller
@@ -22,14 +23,144 @@ class EmpresaController extends Controller
 
     public function Empresa()
     {
-
       $user = Auth::user();
-
       $empresaid = $user->id_compania;
-
       $empresa = Empresa::where('id_compania','=',$empresaid)->first();
 
-        return view('/Administracion/empresa', compact('empresa'));
+     // configuracion google maps
+     $config = array();
+     $config['center'] = 'auto';
+     $config['onboundschanged'] = 'if (!centreGot) {
+             var mapCentre = map.getCenter();
+             var infowindow = new google.maps.InfoWindow();
+             marker_0.setOptions({
+                 position: new google.maps.LatLng(mapCentre.lat(), mapCentre.lng())
+             });
+             var geocoder;
+             geocoder = new google.maps.Geocoder();
+             var latlng = new google.maps.LatLng(mapCentre.lat(), mapCentre.lng());
+               geocoder.geocode({latLng: latlng}, function(results, status) {
+                 if (status == google.maps.GeocoderStatus.OK) {
+                   if (results[0]) {
+                     map.fitBounds(results[0].geometry.viewport);
+
+                     $("#address").text(results[0].formatted_address);
+                      $("#direccion").val(results[0].formatted_address);
+
+                   } else {
+                     $("#address").text("No se encontro registro del lugar seleccionado");
+                      $("#direccion").val("No se encontro registro del lugar seleccionado");
+                   }
+                 } else {
+                   $("#address").text("No se encontro registro del lugar seleccionado " + status);
+                   $("#direccion").val(results[0].formatted_address);
+                 }
+               });
+         }
+         centreGot = true;';
+     $config['places'] = TRUE;
+     $config['placesAutocompleteInputID'] = 'searchmap';
+     $config['placesAutocompleteBoundsMap'] = TRUE; // set results biased towards the maps viewport
+     $config['placesAutocompleteOnChange'] = '
+                     var place = placesAutocomplete.getPlace();
+                     marker_0.setOptions({position: {lat: place.geometry.location.lat(), lng: place.geometry.location.lng()} });
+                     if (!place.geometry) {
+                       // User entered the name of a Place that was not suggested and
+                       // pressed the Enter key, or the Place Details request failed.
+                       window.alert("No se encontro la ubicacion de tu busqueda");
+                       return;
+                     }
+
+                     // If the place has a geometry, then present it on a map.
+                     if (place.geometry.viewport) {
+                       map.fitBounds(place.geometry.viewport);
+
+                     } else {
+                       map.setCenter(place.geometry.location);
+                       map.setZoom(17);  // Why 17? Because i want.
+                     }
+                     var address = "";
+                     if (place.address_components) {
+                       address = [
+                         (place.address_components[0] && place.address_components[0].short_name || ""),
+                         (place.address_components[1] && place.address_components[1].short_name || ""),
+                         (place.address_components[2] && place.address_components[2].short_name || "")
+                       ].join("");
+                     };
+
+                     var geocoder;
+                     geocoder = new google.maps.Geocoder();
+                     var latlng = new google.maps.LatLng(place.geometry.location.lat(), place.geometry.location.lng());
+                       geocoder.geocode({latLng: latlng}, function(results, status) {
+                         if (status == google.maps.GeocoderStatus.OK) {
+                           if (results[0]) {
+                             map.fitBounds(results[0].geometry.viewport);
+                             $("#address").text(results[0].formatted_address);
+                              $("#direccion").val(results[0].formatted_address);
+                            } else {
+                              $("#address").text("No se encontro registro del lugar seleccionado");
+                               $("#direccion").val("No se encontro registro del lugar seleccionado");
+                            }
+                          } else {
+                            $("#address").text("No se encontro registro del lugar seleccionado " + status);
+                            $("#direccion").val(results[0].formatted_address);
+                          }
+                       });';
+
+      $config['onclick'] = '$("#lat").val(event.latLng.lat()); $("#lng").val(event.latLng.lng());
+      marker_0.setOptions({position: {lat: event.latLng.lat(), lng: event.latLng.lng()} });
+      var geocoder;
+      geocoder = new google.maps.Geocoder();
+      var latlng = new google.maps.LatLng(event.latLng.lat(), event.latLng.lng());
+        geocoder.geocode({latLng: latlng}, function(results, status) {
+          if (status == google.maps.GeocoderStatus.OK) {
+            if (results[0]) {
+              map.fitBounds(results[0].geometry.viewport);
+              $("#address").text(results[0].formatted_address);
+               $("#direccion").val(results[0].formatted_address);
+             } else {
+               $("#address").text("No se encontro registro del lugar seleccionado");
+                $("#direccion").val("No se encontro registro del lugar seleccionado");
+             }
+           } else {
+             $("#address").text("No se encontro registro del lugar seleccionado " + status);
+             $("#direccion").val(results[0].formatted_address);
+           }
+        });';
+
+     app('map')->initialize($config);
+
+     // set up the marker ready for positioning
+     // once we know the users location marker_0.setOptions({
+     // position: new google.maps.LatLng(mapCentre.lat(), mapCentre.lng()) });
+     $marker = array();
+     $marker['draggable'] = true;
+     $marker['ondrag'] = '$("#lat").val(event.latLng.lat());$("#lng").val(event.latLng.lng());';
+     $marker['ondragend'] = '$("#lat").val(event.latLng.lat());$("#lng").val(event.latLng.lng());
+     var geocoder;
+     geocoder = new google.maps.Geocoder();
+     var latlng = new google.maps.LatLng(event.latLng.lat(), event.latLng.lng());
+       geocoder.geocode({latLng: latlng}, function(results, status) {
+         if (status == google.maps.GeocoderStatus.OK) {
+           if (results[0]) {
+             map.fitBounds(results[0].geometry.viewport);
+             $("#address").text(results[0].formatted_address);
+              $("#direccion").val(results[0].formatted_address);
+            } else {
+              $("#address").text("No se encontro registro del lugar seleccionado");
+               $("#direccion").val("No se encontro registro del lugar seleccionado");
+            }
+          } else {
+            $("#address").text("No se encontro registro del lugar seleccionado " + status);
+            $("#direccion").val(results[0].formatted_address);
+          }
+       });';
+     $marker['onpositionchanged'] = '$("#lat").val(marker_0.position.lat());$("#lng").val(marker_0.position.lng()); ';
+     app('map')->add_marker($marker);
+
+     $map = app('map')->create_map();
+
+        return view('/Administracion/empresa', compact('empresa','map'));
     }
 
     public function CrearTarjeta()
@@ -43,6 +174,9 @@ class EmpresaController extends Controller
 
         return view('/Administracion/MisTarjetas', compact('abecedario'));
     }
+
+
+
 
     public function index()
     {
@@ -65,9 +199,24 @@ class EmpresaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function storeubicacion($id,Request $request)
     {
         //
+        return(dd($request));
+        $user = Auth::user();
+        $empresaid = $user->id_compania;
+
+        $tablaempresa= Empresa::where('id_compania','=',$empresaid)->first();
+
+        $empresaubicacion = new empresaubicacion;
+        $empresaubicacion->id_empresas = $$tablaempresa->id;
+        $empresaubicacion->id_compania = $empresaid;
+        $empresaubicacion->direccion = $request->direccion;
+        $empresaubicacion->lat = $request->lat;
+        $empresaubicacion->lng = $request->lng;
+
+        $empresaubicacion->save();
+
     }
 
     /**

@@ -23,3 +23,6 @@ Route::get('/CrearTarjeta', 'EmpresaController@CrearTarjeta')->name('CrearTarjet
 Route::get('/MisTarjetas', 'EmpresaController@MisTarjetas')->name('MisTarjetas');
 Route::post('/guardarregistro','homecontroller@guardaregistro')->name('guardaregsitro');
 Route::post('/empresa/edit/{id}','EmpresaController@editarempresa')->name('editarempresa');
+Route::post('/empresa/storeubicacion/{id}','EmpresaController@storeubicacion')->name('storeubicacion');
+
+Route::get('/gmaps', ['as ' => 'gmaps', 'uses' => 'EmpresaController@map']);

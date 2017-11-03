@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+
+  <script type="text/javascript">var centreGot = false;</script>{!!$map['js']!!}
+
     <link href="css/iCheck/custom.css" rel="stylesheet">
     <link href="css/animate.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
@@ -29,54 +32,85 @@
     </div>
   </div>
 
-  <div class="col-lg-6 col-md-6 col-sm-6">
-    <div class="form-group">
-      <label class="control-label" ><FONT SIZE=22 color="cian">Compañia</FONT></label>
-    </div>
 
-
-  <!-- Text input-->
-
-    <div class="form-group">
-      <label class="col-md-4 control-label">Nombre</label>
-      <div class="col-md-8 inputGroupContainer">
-        <div class="input-group">
-          <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-          <input  name="nombre" id="nombre" placeholder="Nombre de la empresa" class="form-control"  type="text" value="{{$empresa->name}}">
-        </div>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label class="col-md-4 control-label">Direccion</label>
-        <div class="col-md-8 inputGroupContainer">
-        <div class="input-group">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-home"></i></span>
-      <input name="direccion" id="direccion" placeholder="Domicilio de la empresa" class="form-control" type="text" value="{{$empresa->direccion}}">
-        </div>
-      </div>
-    </div>
-  </div>
 
   <input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
   <input type="text" id="empresauid" name="empresauid" value="{{ Auth::user()->id_compania }}" style="display:none;" />
   <input type="text" id="id" name="id" value="{{ Auth::user()->id }}" style="display:none;" />
   <input type="text" id="archivoname" name="archivoname" value="{{ Auth::user()->archivo }}" style="display:none;" />
   <input type="file" id="files" name="files" style="display:none;" />
+
+
+
+</form>
+
+<div class="col-lg-6 col-md-6 col-sm-6">
+  <div class="form-group">
+    <label class="control-label" ><FONT SIZE=22 color="cian">Compañia</FONT></label>
+  </div>
+
+
+<!-- Text input-->
+
+  <div class="form-group">
+
+    <br>
+    <label class="col-md-4 control-label">Nombre</label>
+    <div class="col-md-8 inputGroupContainer">
+      <div class="input-group">
+        <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+        <input onkeypress="return pulsar(event)"  name="nombre" id="nombre" placeholder="Nombre de la empresa" class="form-control"  type="text" value="{{$empresa->name}}">
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-md-4 control-label"></label>
+    <div class="col-md-4">
+      <button type="button" onclick="guardarnombre()" class="btn btn-warning" >Guardar nombre de empresa <span class="glyphicon glyphicon-send"></span></button>
+    </div>
+  </div>
+
+
+</div>
 </div>
 
+<form class="well form-horizontal" action="/empresa/storeubicacion/1" method="post"  id="ubica_form">
+<div class="row">
+  <div class="form-group">
+    <label class="control-label" ><FONT SIZE=22 color="cian">Agregar ubicaci&oacute;n</FONT></label>
+  </div>
+  <div class="col-md-10 inputGroupContainer">
+    <div class="col-md-4">
+    <label class="col-md-12 control-label">Buscar ubicacion</label>
+    <label class="col-md-12 control-label">Ubicacion actual del puntero</label>
+    </div>
+    <div class="input-group">
+      <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
+      <input onkeypress="return pulsar(event)"  name="nombre" id="searchmap" placeholder="Busca ubicacion" class="form-control"  type="text" value="" >
+       <div class="col-md-12" id="address"name="address"></div>
+    </div>
+  </div>
+
+  {!!$map['html']!!}
+
+   <input type="hidden" id="lat" name="lat">
+   <input type="hidden" id="lng" name="lng">
+   <input type="hidden" id="direccion" name="direccion">
+</div>
 <!-- Button -->
 <div class="form-group">
   <label class="col-md-4 control-label"></label>
   <div class="col-md-4">
-    <button type="button" onclick="storagenew()" class="btn btn-warning" >Guardar Cambios <span class="glyphicon glyphicon-send"></span></button>
+    <!--<button type="button" onclick="guardaubicacion()" class="btn btn-warning" >Guardar ubicacion <span class="glyphicon glyphicon-send"></span></button>-->
+    <button type="submit"class="btn btn-warning" >Guardar ubicacion <span class="glyphicon glyphicon-send"></span></button>
+
   </div>
 </div>
-
-
-
-</fieldset>
 </form>
+</fieldset>
+
+
     </div><!-- /.container -->
 
     <script src="https://www.gstatic.com/firebasejs/4.6.0/firebase.js"></script>
@@ -120,11 +154,43 @@
     }
 
 
-    function storagenew(){
+    function guardarnombre(){
 
 
-      console.log(4)
     }
+
+    function guardaubicacion(){
+
+      var value = $("#id").val();
+      var route = "/empresa/storeubicacion/"+value+"";
+      var token = $("#token").val();
+      var fd = new FormData(document.getElementById("ubica_form"));
+
+      $.ajax({
+        url: route,
+        headers: {'X-CSRF_TOKEN': token},
+        type: 'post',
+        data: fd,
+        processData: false,  // tell jQuery not to process the data
+        contentType: false,
+        success: function(){
+          setTimeout(function() {
+                  toastr.options = {
+                      closeButton: true,
+                      progressBar: true,
+                      showMethod: 'slideDown',
+                      timeOut: 4000
+                  };
+                  toastr.success('Se ha añadido nueva localizacion', 'Alta de usuario');
+
+              }, 0);
+        },
+        error: function(){
+        }
+      });
+      }
+
+
 
     var uploader = document.getElementById('uploader');
     var fileButton =         document.getElementById('files');
@@ -162,7 +228,9 @@
     });
     });
 
+
     $(document).ready(function() {
+
 
     });
 
@@ -194,5 +262,11 @@
       $('#archivobtn').click(function () {
           $("#files").click();
       });
+
+      function pulsar(e) {
+        tecla = (document.all) ? e.keyCode :e.which;
+        return (tecla!=13);
+      }
+
     </script>
 @endsection
