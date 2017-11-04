@@ -60,7 +60,7 @@
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-inverse navbar-static-top" style=" background-color: #0099CC;">
+        <nav class="navbar navbar-inverse navbar-static-top" style=" background-color: #2B98F0;">
             <div class="container">
                 <div class="navbar-header">
 
@@ -75,7 +75,7 @@
                     <!-- Branding Image -->
                     @auth
                         <a class="navbar-brand" href="{{ url('/home') }}">
-                          Home
+                          <img src="/img/BU.jpeg" alt="Home" height="25" width="25" class="img-rounded" id="myimg">
                         </a>
                     @else
                         <a class="navbar-brand" href="{{ url('/') }}">

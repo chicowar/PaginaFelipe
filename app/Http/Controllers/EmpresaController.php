@@ -7,6 +7,7 @@ use App\User;
 use App\Models\Empresa;
 use App\Models\empresaubicacion;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class EmpresaController extends Controller
 {
@@ -181,22 +182,76 @@ class EmpresaController extends Controller
     }
 
 
-
-
-    public function index()
+    public function usuarioAdmin()
     {
-        //return view('/Administracion/empresa');
+      $Users = Auth::user();
+
+      $compañiaid = $Users->id_compania;
+
+      $usuario = DB::table('users')
+      //->leftjoin('areas','areas.id','=','users.id_area')
+      ->select('users.*')
+      ->where('users.id_compania',$Users->id_compania)
+      ->get();
+
+      return view('/Administracion/usuarioAdmin', compact('usuario'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function Pago()
     {
-        //
+
+      return view('/Administracion/Pago');
     }
+
+    protected function createAdmin(Request $request)
+    {
+       $user = new User;
+
+       $user->name = $request->input('name');
+       $user->email = $request->input('email');
+       $user->password = bcrypt($request->input('password'));
+       $user->id_compania = $request->input('empresauid');
+       $user->save();
+
+       return redirect('/usuarioAdmin');
+    }
+
+    public function editU($id){
+      $user = User::find($id);
+        return response()->json(
+          $user->toArray()
+        );
+    }
+
+    public function usuariosedit($id,Request $request)
+    {
+      $user = Auth::user();
+      $usuarios = User::findorfail($id);
+
+      //Campos normales
+      if ($request->input('epassword') != null) {
+        $usuarios->password = bcrypt($request->input('epassword'));
+      }
+
+
+      $usuarios->name = $request->input('enombre');
+      $usuarios->email = $request->input('eemail');
+      $usuarios->save();
+      return redirect('/usuarioAdmin');
+    }
+
+    public function destroyU($id)
+    {
+      $usuarios = Auth::user();
+      $user = User::findorfail($id);
+      $user-> delete();
+
+
+      return redirect('/usuarioAdmin');
+
+    }
+
+
 
     /**
      * Store a newly created resource in storage.
