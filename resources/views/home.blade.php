@@ -1,9 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-    <link href="css/iCheck/custom.css" rel="stylesheet">
-    <link href="css/animate.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
 
 @if (session('status'))
 <div class="alert alert-success">
