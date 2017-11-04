@@ -33,5 +33,6 @@ Route::delete('/usuarios/destroy/{id}', 'EmpresaController@destroyU');
 Route::post('/empresa/edit/{id}','EmpresaController@editarempresa')->name('editarempresa');
 Route::post('/empresa/storeempresa/{id}','EmpresaController@storeempresa')->name('storeempresa');
 Route::post('/empresa/storeubicacion/{id}','EmpresaController@storeubicacion')->name('storeubicacion');
+Route::get('/empresa/ubicaciondelete/{id}','EmpresaController@ubicaciondelete')->name('ubicaciondelete');
 
 Route::get('/gmaps', ['as ' => 'gmaps', 'uses' => 'EmpresaController@map']);

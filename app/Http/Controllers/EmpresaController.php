@@ -27,6 +27,9 @@ class EmpresaController extends Controller
       $empresaid = $user->id_compania;
       $empresa = Empresa::where('id_compania','=',$empresaid)->first();
 
+     $ubicaciones = empresaubicacion::where('id_compania','=',$empresaid)->get();
+
+
      // configuracion google maps
      $config = array();
      $config['center'] = 'auto';
@@ -219,7 +222,15 @@ class EmpresaController extends Controller
 
         $empresaubicacion->save();
 
+        $user = Auth::user();
+        $empresaid = $user->id_compania;
+        $empresa = Empresa::where('id_compania','=',$empresaid)->first();
 
+       $ubicaciones = empresaubicacion::where('id_compania','=',$empresaid)->get();
+
+       return response()->json(
+         $ubicaciones->toArray()
+       );
     }
 
     /**
@@ -241,7 +252,9 @@ class EmpresaController extends Controller
 
        $empresa = Empresa::where('id_compania','=',$empresaid)->first();
 
-       return($empresa)->tojson();
+       return response()->json(
+         $empresa->toArray()
+       );
     }
 
     /**
@@ -282,8 +295,19 @@ class EmpresaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function ubicaciondelete($id)
     {
         //
+        empresaubicacion::where('id','=',$id)->delete();
+
+        $user = Auth::user();
+        $empresaid = $user->id_compania;
+        $empresa = Empresa::where('id_compania','=',$empresaid)->first();
+
+        $ubicaciones = empresaubicacion::where('id_compania','=',$empresaid)->get();
+
+        return response()->json(
+          $ubicaciones->toArray()
+        );
     }
 }

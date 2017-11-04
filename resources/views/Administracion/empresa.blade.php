@@ -87,6 +87,19 @@
 </form>
 </div>
 
+<form class="well form-horizontal" action="/empresa/storeubicacion/1" method="post" >
+<div class="row">
+  <div class="form-group">
+    <label class="control-label" ><FONT SIZE=22 color="cian">Ubicaciones guardadas</FONT></label>
+  </div>
+  <ul class="list-group" id="listaubicacion">
+    @foreach ($ubicaciones as $ubicacion)
+    <li class="list-group-item">{{ $ubicacion->direccion }} <span onclick="borrarubicacion({{ $ubicacion->id }})"; class="badge"><a href="#">Eliminar ubicaci&oacute;n</a></span></li>
+    @endforeach
+  </ul>
+
+</div>
+</form>
 <form class="well form-horizontal" action="/empresa/storeubicacion/1" method="post"  id="ubica_form">
 <div class="row">
   <div class="form-group">
@@ -114,7 +127,8 @@
 <div class="form-group">
   <label class="col-md-4 control-label"></label>
   <div class="col-md-4">
-    <button type="button" onclick="guardaubicacion()" class="btn btn-warning" >Agregar ubicaci&oacute;n actual<span class="glyphicon glyphicon-send"></span></button>
+    <br>
+    <button type="button" onclick="guardaubicacion()" class="btn btn-warning" >Agregar ubicaci&oacute;n actual seleccionada<span class="glyphicon glyphicon-send"></span></button>
 
 
   </div>
@@ -193,7 +207,6 @@
 
                     }, 0);
 
-                    alert(data.name);
                     $('#empresalabel').empty();
                     $('#empresalabel').append(data.name);
                     $('#urllabel').empty();
@@ -230,7 +243,7 @@
         data: fd,
         processData: false,  // tell jQuery not to process the data
         contentType: false,
-        success: function(){
+        success: function(data){
           setTimeout(function() {
                   toastr.options = {
                       closeButton: true,
@@ -241,6 +254,13 @@
                   toastr.success('Se ha añadido nueva localizacion', 'Alta ubicación');
 
               }, 0);
+
+              $('#listaubicacion').empty();
+
+              for (var i = 0; i < data.length; i++) {
+                $('#listaubicacion').append('<li class="list-group-item">'+data[i].direccion+' <span onclick="borrarubicacion('+data[i].id+');" class="badge"><a href="#">Eliminar ubicaci&oacute;n</a></span></li>');
+              }
+
         },
         error: function(){
           setTimeout(function() {
@@ -300,6 +320,54 @@
 
 
     });
+
+
+    function borrarubicacion(id) {
+
+
+        var x = confirm("Estas seguro de borrar la ubicacion?");
+        if (x){
+
+
+          var route = "/empresa/ubicaciondelete/"+id+"";
+
+          $.get(route,  function(data){
+
+            setTimeout(function() {
+                    toastr.options = {
+                        closeButton: true,
+                        progressBar: true,
+                        showMethod: 'slideDown',
+                        timeOut: 5000
+                    };
+                    toastr.success('Se borro la ubicacion', 'Borra ubicación');
+
+                }, 0);
+
+                $('#listaubicacion').empty();
+
+                for (var i = 0; i < data.length; i++) {
+                  $('#listaubicacion').append('<li class="list-group-item">'+data[i].direccion+' <span onclick="borrarubicacion('+data[i].id+');" class="badge"><a href="#">Eliminar ubicaci&oacute;n</a></span></li>');
+                }
+
+          });
+
+        }
+        else {
+          setTimeout(function() {
+                  toastr.options = {
+                      closeButton: true,
+                      progressBar: true,
+                      showMethod: 'slideDown',
+                      timeOut: 5000
+                  };
+                  toastr.info('No se borro la ubicacion', 'Borra ubicación');
+
+              }, 0);
+        }
+
+    }
+
 
         function archivo(evt) {
               var files = evt.target.files; // FileList object
