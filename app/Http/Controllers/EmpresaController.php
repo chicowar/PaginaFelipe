@@ -171,7 +171,16 @@ class EmpresaController extends Controller
 
     public function CrearTarjeta()
     {
-        return view('/Administracion/CrearTarjeta');
+
+      $user = Auth::user();
+      $empresaid = $user->id_compania;
+      $empresa = Empresa::where('id_compania','=',$empresaid)->first();
+
+      $ubicaciones = empresaubicacion::where('id_compania','=',$empresaid)->get();
+
+
+
+        return view('/Administracion/CrearTarjeta',compact('ubicaciones'));
     }
 
     public function MisTarjetas()
