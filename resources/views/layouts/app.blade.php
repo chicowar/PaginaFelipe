@@ -75,7 +75,7 @@
                     <!-- Branding Image -->
                     @auth
                         <a class="navbar-brand" href="{{ url('/home') }}">
-                          <img src="/img/BU.jpeg" alt="Home" height="25" width="25" class="img-rounded" id="myimg">
+                          <img src="/img/BU.jpeg" alt="Home" height="25" width="25" class="img-rounded" id="myimgInicio">
                         </a>
                     @else
                         <a class="navbar-brand" href="{{ url('/') }}">
