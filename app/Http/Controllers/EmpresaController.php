@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\Models\Empresa;
+use App\Models\empresausuarios;
 use App\Models\empresaubicacion;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -348,10 +349,36 @@ class EmpresaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function storeTarjeta(Request $request)
     {
         //
+       //return(dd($request));
+       $user = new empresausuarios;
+       $user->id_compania = $request->empresauid;
+       $user->uid = $request->uid;
+       $user->nombreusuario = $request->first_name;
+
+        return redirect()->action('EmpresaController@CrearTarjeta');
     }
+
+
+    /**
+     * obtiene latitud y longitud.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function ubicacionget($id)
+    {
+        //
+        $ubica = empresaubicacion::findorfail($id);
+
+        return response()->json(
+          $ubica->toArray()
+        );
+    }
+
 
     /**
      * Remove the specified resource from storage.

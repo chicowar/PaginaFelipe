@@ -20,6 +20,8 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/Empresa', 'EmpresaController@Empresa')->name('Empresa');
 Route::get('/CrearTarjeta', 'EmpresaController@CrearTarjeta')->name('CrearTarjeta');
+Route::post('/storeTarjeta', 'EmpresaController@storeTarjeta')->name('storeTarjeta');
+Route::get('/storetarjeta/ubicacionget/{id}','EmpresaController@ubicacionget')->name('ubicacionget');
 Route::get('/MisTarjetas', 'EmpresaController@MisTarjetas')->name('MisTarjetas');
 Route::get('/usuarioAdmin', 'EmpresaController@usuarioAdmin')->name('usuarioAdmin');
 Route::get('/Pago', 'EmpresaController@Pago')->name('Pago');

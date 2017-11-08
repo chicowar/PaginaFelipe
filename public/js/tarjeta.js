@@ -1,5 +1,5 @@
 $(document).ready(function() {
-$('#contact_form').bootstrapValidator({
+$('#tarjetaForm').bootstrapValidator({
  // To use feedback icons, ensure that you use Bootstrap v3.1.0 or later
  feedbackIcons: {
      valid: 'glyphicon glyphicon-ok',
@@ -11,97 +11,63 @@ $('#contact_form').bootstrapValidator({
          validators: {
                  stringLength: {
                  min: 2,
+                 message: 'Es necesario ingresar el nombre'
              },
                  notEmpty: {
-                 message: 'Please supply your first name'
+                 message: 'Es necesario ingresar el nombre'
              }
          }
      },
-      last_name: {
-         validators: {
-              stringLength: {
-                 min: 2,
-             },
-             notEmpty: {
-                 message: 'Please supply your last name'
-             }
-         }
-     },
+
      email: {
          validators: {
              notEmpty: {
-                 message: 'Please supply your email address'
+                 message: 'Es necesario ingresar el correo electronico'
              },
              emailAddress: {
-                 message: 'Please supply a valid email address'
+                 message: 'Por favor ingresa una direccion de correo valida'
              }
          }
      },
      phone: {
          validators: {
              notEmpty: {
-                 message: 'Please supply your phone number'
+                 message: 'Por favor ingresa un numero de telefono a 10 digitos'
              },
-             phone: {
-                 country: 'US',
-                 message: 'Please supply a vaild phone number with area code'
-             }
+             stringLength: {
+                       min: 10,
+                       max: 10,
+                       message: 'El telefono debe ser a 10 digitos (lada + numero)'
+                   },
+
+
          }
      },
-     address: {
+     puesto: {
          validators: {
               stringLength: {
-                 min: 8,
+                 min: 2,
+                 message: 'Es necesario ingresar el puesto'
              },
              notEmpty: {
-                 message: 'Please supply your street address'
+                 message: 'Es necesario ingresar el puesto'
              }
          }
      },
-     city: {
+     ubicacionselect: {
          validators: {
-              stringLength: {
-                 min: 4,
-             },
              notEmpty: {
-                 message: 'Please supply your city'
+                 message: 'Es necesario guardes la ubicacion de la empresa en el formulario de empresa para continuar.'
              }
          }
      },
-     state: {
-         validators: {
-             notEmpty: {
-                 message: 'Please select your state'
-             }
-         }
-     },
-     zip: {
-         validators: {
-             notEmpty: {
-                 message: 'Please supply your zip code'
-             },
-             zipCode: {
-                 country: 'US',
-                 message: 'Please supply a vaild zip code'
-             }
-         }
-     },
-     comment: {
-         validators: {
-               stringLength: {
-                 min: 10,
-                 max: 200,
-                 message:'Please enter at least 10 characters and no more than 200'
-             },
-             notEmpty: {
-                 message: 'Please supply a description of your project'
-             }
-             }
-         }
+
+
      }
  })
  .on('success.form.bv', function(e) {
-     $('#success_message').slideDown({ opacity: "show" }, "slow") // Do something ...
+   alert('bootstrap');
+/*     $('#success_message').slideDown({ opacity: "show" }, "slow") // Do something ...
          $('#contact_form').data('bootstrapValidator').resetForm();
 
      // Prevent form submission
@@ -114,8 +80,8 @@ $('#contact_form').bootstrapValidator({
      var bv = $form.data('bootstrapValidator');
 
      // Use Ajax to submit form data
-     $.post($form.attr('action'), $form.serialize(), function(result) {
+    $.post($form.attr('action'), $form.serialize(), function(result) {
          console.log(result);
-     }, 'json');
+     }, 'json');*/
  });
 });

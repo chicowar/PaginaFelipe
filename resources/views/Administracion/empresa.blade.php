@@ -53,7 +53,7 @@
 
 <!-- Text input-->
 
-<form class="well form-horizontal" action="/empresa/storeubicacion/1" method="post"  id="empresa_form">
+<form class="well form-horizontal" action="" method="post"  id="empresa_form">
   <div class="form-group">
 
     <br>
@@ -164,7 +164,10 @@
 
     // Or inserted into an <img> element:
     var img = document.getElementById('myimg');
+
+
     img.src = url;
+
     }).catch(function(error) {
       // Handle any errors
     });
