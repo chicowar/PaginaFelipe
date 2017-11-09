@@ -21,11 +21,13 @@
           <div class="col-sm-4">
               <div class="text-center">
                   <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a4.jpg">
-                  <div class="m-t-xs font-bold">Sales manager</div>
+                  <div class="m-t-xs font-bold" id="puesto" >Sales manager</div>
+                  <input type="text" name="recibidas" id = "recibidas" value="" style="display: none;" >
+                  <input type="text" name="Enviadas" id = "Enviadas" value="" style="display: none;" >
               </div>
           </div>
           <div class="col-sm-8">
-              <h3><strong>Michael Zimber</strong></h3>
+              <h3><strong id="nombreu">Michael Zimber</strong></h3>
               <p><i class="fa fa-map-marker"></i> Riviera State 32/106</p>
               <address>
                   <strong>Twitter, Inc.</strong><br>
@@ -56,5 +58,7 @@
 
 <script src="js/Chart.min.js"></script>
 <script src="js/chartjs-demo.js"></script>
+
+
 
 @endsection

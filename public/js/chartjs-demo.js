@@ -1,42 +1,46 @@
-$(function () {
 
 
-    var barData = {
-        labels: ["January", "February", "March", "April", "May", "June", "July"],
-        datasets: [
-            {
-                label: "My First dataset",
-                fillColor: "rgba(220,220,220,0.5)",
-                strokeColor: "rgba(220,220,220,0.8)",
-                highlightFill: "rgba(220,220,220,0.75)",
-                highlightStroke: "rgba(220,220,220,1)",
-                data: [65, 59, 80, 81, 56, 55, 40]
-            },
-            {
-                label: "My Second dataset",
-                fillColor: "rgba(26,179,148,0.5)",
-                strokeColor: "rgba(26,179,148,0.8)",
-                highlightFill: "rgba(26,179,148,0.75)",
-                highlightStroke: "rgba(26,179,148,1)",
-                data: [28, 48, 40, 19, 86, 27, 90]
-            }
-        ]
-    };
+var getusuario = firebase.database().ref('usuarios/HNKDVxzrfyfrDiqo5b1ZCpNvWh53');
+getusuario.on('value', function(datos) {
+  $("#puesto").empty();
+  $("#puesto").append(datos.val().Puesto);
+  $("#nombreu").empty();
+  $("#nombreu").append(datos.val().nombre);
+  $("#recibidas").val(datos.val().Recibidas);
+  $("#Enviadas").val(datos.val().Enviadas);
 
-    var barOptions = {
-        scaleBeginAtZero: true,
-        scaleShowGridLines: true,
-        scaleGridLineColor: "rgba(0,0,0,.05)",
-        scaleGridLineWidth: 1,
-        barShowStroke: true,
-        barStrokeWidth: 2,
-        barValueSpacing: 5,
-        barDatasetSpacing: 1,
-        responsive: true,
-    }
+  $(function () {
 
 
-    var ctx = document.getElementById("barChart").getContext("2d");
-    var myNewChart = new Chart(ctx).Bar(barData, barOptions);
+      var barData = {
+          labels: ["Recibidas", "Enviadas"],
+          datasets: [
+              {
+                  label: "Enviadas",
+                  fillColor: "rgba(043,152,240,0.5)",
+                  strokeColor: "rgba(043,152,240,0.8)",
+                  highlightFill: "rgba(043,152,240,0.75)",
+                  highlightStroke: "rgba(043,152,240,1)",
+                  data: [$("#recibidas").val(), $("#Enviadas").val()]
+              }
+          ]
+      };
 
+      var barOptions = {
+          scaleBeginAtZero: true,
+          scaleShowGridLines: true,
+          scaleGridLineColor: "rgba(0,0,0,.05)",
+          scaleGridLineWidth: 1,
+          barShowStroke: true,
+          barStrokeWidth: 2,
+          barValueSpacing: 5,
+          barDatasetSpacing: 1,
+          responsive: true,
+      }
+
+
+      var ctx = document.getElementById("barChart").getContext("2d");
+      var myNewChart = new Chart(ctx).Bar(barData, barOptions);
+
+  });
 });
