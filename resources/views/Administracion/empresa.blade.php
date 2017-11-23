@@ -94,7 +94,7 @@
   </div>
   <ul class="list-group" id="listaubicacion">
     @foreach ($ubicaciones as $ubicacion)
-    <li class="list-group-item">{{ $ubicacion->direccion }} <span onclick="borrarubicacion({{ $ubicacion->id }})"; class="badge"><a href="#">Eliminar ubicaci&oacute;n</a></span></li>
+    <li class="list-group-item">{{ $ubicacion->direccion }}  {{ $ubicacion->detalle }}<span onclick="borrarubicacion({{ $ubicacion->id }})"; class="badge"><a href="#">Eliminar ubicaci&oacute;n</a></span></li>
     @endforeach
   </ul>
 
@@ -109,11 +109,15 @@
     <div class="col-md-4">
     <label class="col-md-12 control-label">Buscar ubicaci&oacute;n</label>
     <label class="col-md-12 control-label">Ubicaci&oacute;n actual del puntero</label>
+    <label class="col-md-12 control-label">Detalle de la ubicaci&oacute;n</label>
     </div>
+    <div class="col-md-8">
     <div class="input-group">
       <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
       <input onkeypress="return pulsar(event)"  name="nombre" id="searchmap" placeholder="Busca ubicación" class="form-control"  type="text" value="" >
-       <div class="col-md-12" id="address"name="address"></div>
+       <div class="col-md-12" id="address"name="address">Direccion</div>
+     </div>
+     <input name="detalle" id="detalle" placeholder="Referencia de tu ubiciacion INT, Piso, etc..." class="form-control"  type="text" value="" >
     </div>
   </div>
 
@@ -152,25 +156,26 @@
       messagingSenderId: "428661649011"
     };
     firebase.initializeApp(config);
+    if (document.getElementById('archivoname').value != '') {
+      // Create a reference with an initial file path and name
+      var storage = firebase.storage();
+      // Create a reference from a Google Cloud Storage URI
+      var storageRef = storage.refFromURL('gs://felipe-29121.appspot.com/Empresa')
 
-    // Create a reference with an initial file path and name
-    var storage = firebase.storage();
-    // Create a reference from a Google Cloud Storage URI
-    var storageRef = storage.refFromURL('gs://felipe-29121.appspot.com/Empresa')
+      var hijo = document.getElementById('empresauid').value+'/'+document.getElementById('archivoname').value;
+      storageRef.child(hijo).getDownloadURL().then(function(url) {
+        // `url` is the download URL for 'images/stars.jpg'
 
-    var hijo = document.getElementById('empresauid').value+'/'+document.getElementById('archivoname').value;
-    storageRef.child(hijo).getDownloadURL().then(function(url) {
-      // `url` is the download URL for 'images/stars.jpg'
-
-    // Or inserted into an <img> element:
-    var img = document.getElementById('myimg');
+      // Or inserted into an <img> element:
+      var img = document.getElementById('myimg');
 
 
-    img.src = url;
+      img.src = url;
 
-    }).catch(function(error) {
-      // Handle any errors
-    });
+      }).catch(function(error) {
+        // Handle any errors
+      });
+    }
 
     function updatefirebase(userId){
       firebase.database().ref('Users/' + userId).set({
@@ -261,7 +266,7 @@
               $('#listaubicacion').empty();
 
               for (var i = 0; i < data.length; i++) {
-                $('#listaubicacion').append('<li class="list-group-item">'+data[i].direccion+' <span onclick="borrarubicacion('+data[i].id+');" class="badge"><a href="#">Eliminar ubicaci&oacute;n</a></span></li>');
+                $('#listaubicacion').append('<li class="list-group-item">'+data[i].direccion+'  '+data[i].detalle+' <span onclick="borrarubicacion('+data[i].id+');" class="badge"><a href="#">Eliminar ubicaci&oacute;n</a></span></li>');
               }
 
         },
@@ -302,6 +307,24 @@
         }
       });
 
+      if (document.getElementById('archivoname').value != '') {
+        // Get a reference to the storage service, which is used to create references in your storage bucket
+        var storage = firebase.storage();
+
+        // Create a storage reference from our storage service
+        var storageRef = storage.ref();
+        // Create a reference to the file to delete
+        var borrarfile = document.getElementById('archivoname').value;
+        console.log(borrarfile);
+        var desertRef = storageRef.child('Empresa/'+Empresauid+'/'+borrarfile);
+
+        // Delete the file
+        desertRef.delete().then(function() {
+          // File deleted successfully
+        }).catch(function(error) {
+          // Uh-oh, an error occurred!
+        });
+      }
 
     var file = e.target.files[0];
     var storageRef = firebase.storage().ref('Empresa/'+Empresauid+'/'+file.name);
@@ -350,7 +373,7 @@
                 $('#listaubicacion').empty();
 
                 for (var i = 0; i < data.length; i++) {
-                  $('#listaubicacion').append('<li class="list-group-item">'+data[i].direccion+' <span onclick="borrarubicacion('+data[i].id+');" class="badge"><a href="#">Eliminar ubicaci&oacute;n</a></span></li>');
+                  $('#listaubicacion').append('<li class="list-group-item">'+data[i].direccion+' '+data[i].detalle+' <span onclick="borrarubicacion('+data[i].id+');" class="badge"><a href="#">Eliminar ubicaci&oacute;n</a></span></li>');
                 }
 
           });

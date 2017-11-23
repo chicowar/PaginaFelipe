@@ -20,6 +20,7 @@ class Empresaubicacion extends Migration
             $table->integer('id_empresas');
             $table->string('id_compania');
             $table->string('direccion');
+            $table->string('detalle');
             $table->float('lat');
             $table->float('lng');
             $table->timestamps();

@@ -17,7 +17,9 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+//Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'EmpresaController@MisTarjetas')->name('home');
+
 Route::get('/Empresa', 'EmpresaController@Empresa')->name('Empresa');
 Route::get('/CrearTarjeta', 'EmpresaController@CrearTarjeta')->name('CrearTarjeta');
 Route::post('/storeTarjeta', 'EmpresaController@storeTarjeta')->name('storeTarjeta');

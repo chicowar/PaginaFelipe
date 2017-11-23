@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class empresaubicacion extends Model
 {
     //
-    protected $fillable = ['id_empresas','id_compania','direccion','lat','lng'];
+    protected $fillable = ['id_empresas','id_compania','direccion','detalle','lat','lng'];
 
 }

@@ -282,6 +282,7 @@ class EmpresaController extends Controller
         $empresaubicacion->id_empresas = $tablaempresa->id;
         $empresaubicacion->id_compania = $empresaid;
         $empresaubicacion->direccion = $request->direccion;
+        $empresaubicacion->detalle = $request->detalle;
         $empresaubicacion->lat = $request->lat;
         $empresaubicacion->lng = $request->lng;
 
