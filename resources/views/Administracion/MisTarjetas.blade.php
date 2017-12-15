@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+<!-- Chosen -->
+<script src="js/plugins/chosen/chosen.jquery.js"></script>
+<link href="css/plugins/chosen/chosen.css" rel="stylesheet">
 
 <link rel="stylesheet" href="css/mistarjetas.css">
 
@@ -12,7 +15,7 @@
             <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content"></i>
             <div class="menu-list">
                 <ul id="menu-content" class="menu-content collapse out">
-                         <p id="mistarjetas">Mis Tarjetas</p>
+                         <p id="mistarjetas">Mis Tarjetas <a data-toggle="modal" data-target="#modalUpload"><i style="color:white;" class="glyphicon glyphicon-plus"></i></a></p>
                     <div id="usuariosadd">
 
                     </div>
@@ -42,6 +45,7 @@
               </div>
           </div>
           <div class="col-sm-8">
+              <input type="hidden" name="uidtarjeta" id='uidtarjeta'>
               <h3><strong id="nombreu">Michael Zimber</strong></h3>
               <p><i class="fa fa-map-marker"></i> Riviera State 32/106</p>
               <address>
@@ -68,9 +72,43 @@
                 </div>
             </div>
         </div>
+        <div class="col-lg-6">
+          <select class="chosen-select form-control required" id="eligegrupo" name="eligegrupo" required >
+            <option ></option>
+             <?php foreach ($grupos as $grupo): ?>
+              <option value=<?=$grupo->id ?> ><?=$grupo->grupo ?></option>
+             <?php endforeach ?>
+          </select>
+        </div>
     </div>
   </div>
   </div>
+  </div>
+
+  <div class="modal fade" id="modalUpload" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+                <h3 class="modal-title">Crear nuevo grupo</h3>
+            </div>
+            <div class="modal-body">
+              <form class="" action="/grupo/store" method="post" accept-charset="UTF-8" enctype="multipart/form-data">
+                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                <div class="row">
+                  <div class="col-md-12 col-sm-12">
+                      <h2><label for="Usuario" class="control-label">Grupo:</label></h2>
+                      <input class="form-control input-lg" id="grupo" type="Text" placeholder="Nombre del grupo" name="grupo" required>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="submit" class="btn btn-success" id="btnobjetivo"><i class="glyphicon glyphicon-floppy-save"></i><br>Agregar</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnCloseUpload"><i class="glyphicon glyphicon-remove"></i><br>Cerrar</button>
+                </div>
+              </form>
+            </div>
+        </div>
+    </div>
   </div>
 
 <script src="js/Chart.min.js"></script>

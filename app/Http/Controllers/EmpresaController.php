@@ -7,6 +7,7 @@ use App\User;
 use App\Models\Empresa;
 use App\Models\empresausuarios;
 use App\Models\empresaubicacion;
+use App\Models\Grupos;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -186,9 +187,12 @@ class EmpresaController extends Controller
 
     public function MisTarjetas()
     {
+      $user = Auth::user();
+      $empresaid = $user->id_compania;
       $abecedario=array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
+      $grupos = Grupos::where('id_compania','=',$empresaid)->get();
 
-        return view('/Administracion/MisTarjetas', compact('abecedario'));
+        return view('/Administracion/MisTarjetas', compact('abecedario','grupos'));
     }
 
 
@@ -322,6 +326,30 @@ class EmpresaController extends Controller
        );
     }
 
+
+    public function storegrupo(Request $request)
+    {
+        //
+        $user = Auth::user();
+        $empresaid = $user->id_compania;
+        $Grupos = new Grupos;
+        $Grupos->grupo = $request->grupo;
+        $Grupos->id_compania = $empresaid;
+        $Grupos->save();
+        return redirect()->action('EmpresaController@MisTarjetas');
+
+    }
+
+
+
+      public function Gruposshow(){
+        $grupo = new Grupos;
+        $grupos = $grupo->all();
+        return response()->json(
+          $grupos->toArray()
+        );
+        }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -363,8 +391,8 @@ class EmpresaController extends Controller
        $user->id_compania = $request->empresauid;
        $user->uid = $request->uid;
        $user->nombreusuario = $request->first_name;
-
-        return redirect()->action('EmpresaController@CrearTarjeta');
+       $user->save();
+       return redirect()->action('EmpresaController@CrearTarjeta');
     }
 
 

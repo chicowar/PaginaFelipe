@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class empresausuarios extends Model
 {
     //
-      protected $fillable = ['id_compania','uid','nombreusuario'];
+      protected $fillable = ['id_compania','uid','nombreusuario','grupo'];
 
 }

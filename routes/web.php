@@ -29,6 +29,10 @@ Route::get('/usuarioAdmin', 'EmpresaController@usuarioAdmin')->name('usuarioAdmi
 Route::get('/Pago', 'EmpresaController@Pago')->name('Pago');
 Route::post('/guardarregistro','homecontroller@guardaregistro')->name('guardaregsitro');
 
+//grupos
+Route::post('/grupo/store', 'EmpresaController@storegrupo')->name('storegrupo');
+Route::get('/Gruposshow', 'EmpresaController@Gruposshow')->name('Gruposshow');
+
 Route::post('/usuarios/store','EmpresaController@createAdmin')->name('createAdmin');
 Route::get('/usuarios/{id}/edit','EmpresaController@editU')->name('editU');
 Route::post('/usuarios/edit/{id}','EmpresaController@usuariosedit')->name('usuariosedit');
