@@ -27,6 +27,7 @@
   <!-- Text input-->
   <div class="col-lg-6 col-md-6 col-sm-6">
     <div class="form-group">
+      <label class="control-label" id="empresalabel">Da click en la imagen para cambiar</label>
       <a  id="archivobtn" type="button" value="Seleccionearchivo" ><output id="list"><img src="/img/companyDefault.png" alt="Compañia" height="142" width="142" class="img-rounded" id="myimg"></output></a>
       <progress id="uploader" value="0" max="100">0%</progress>
     </div>
@@ -40,7 +41,7 @@
   <input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
   <input type="text" id="empresauid" name="empresauid" value="{{ Auth::user()->id_compania }}" style="display:none;" />
   <input type="text" id="id" name="id" value="{{ Auth::user()->id }}" style="display:none;" />
-  <input type="text" id="archivoname" name="archivoname" value="{{ Auth::user()->archivo }}" style="display:none;" />
+  <input type="text" id="archivoname" name="archivoname" value="{{$empresa->archivo}}" style="display:none;" />
   <input type="file" id="files" name="files" style="display:none;" />
 
 </form>
@@ -115,8 +116,8 @@
     <div class="input-group">
       <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
       <input onkeypress="return pulsar(event)"  name="nombre" id="searchmap" placeholder="Busca ubicación" class="form-control"  type="text" value="" >
-       <div class="col-md-12" id="address"name="address">Direccion</div>
      </div>
+     <div class="col-md-12" id="address"name="address">Direccion</div>
      <input name="detalle" id="detalle" placeholder="Referencia de tu ubiciacion INT, Piso, etc..." class="form-control"  type="text" value="" >
     </div>
   </div>
@@ -303,7 +304,9 @@
         data: fd,
         processData: false,  // tell jQuery not to process the data
         contentType: false,
-        success: function(){
+        success: function(res){
+
+        $('#archivoname').val(res.archivo);
         }
       });
 
@@ -315,7 +318,7 @@
         var storageRef = storage.ref();
         // Create a reference to the file to delete
         var borrarfile = document.getElementById('archivoname').value;
-        console.log(borrarfile);
+      
         var desertRef = storageRef.child('Empresa/'+Empresauid+'/'+borrarfile);
 
         // Delete the file

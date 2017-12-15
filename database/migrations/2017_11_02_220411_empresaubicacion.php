@@ -23,6 +23,7 @@ class Empresaubicacion extends Migration
             $table->string('detalle');
             $table->float('lat');
             $table->float('lng');
+            $table->string('detalle');
             $table->timestamps();
         });
     }

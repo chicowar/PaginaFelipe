@@ -285,6 +285,7 @@ class EmpresaController extends Controller
         $empresaubicacion->detalle = $request->detalle;
         $empresaubicacion->lat = $request->lat;
         $empresaubicacion->lng = $request->lng;
+        $empresaubicacion->detalle = $request->detalle;
 
         $empresaubicacion->save();
 
@@ -294,9 +295,7 @@ class EmpresaController extends Controller
 
        $ubicaciones = empresaubicacion::where('id_compania','=',$empresaid)->get();
 
-       return response()->json(
-         $ubicaciones->toArray()
-       );
+       return response()->json($ubicaciones->toArray());
     }
 
     /**
@@ -337,10 +336,16 @@ class EmpresaController extends Controller
        $file = $request->file('files');
        $user->archivo = $file->getClientOriginalName();
        $user->save();
+/*
+       User::where('id_compania', $user->id_compania)
+                 ->update(['archivo' => $file->getClientOriginalName()]);
+*/
 
-       return response()->json([
-         'mensaje' => "listo"
-       ]);
+       Empresa::where('id_compania', $user->id_compania)
+                 ->update(['archivo' => $file->getClientOriginalName()]);
+
+
+       return response()->json($user);
      }
 
     /**

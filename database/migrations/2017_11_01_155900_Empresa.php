@@ -19,6 +19,7 @@ class Empresa extends Migration
             $table->string('id_compania')->unique();
             $table->string('name')->nullable();
             $table->string('url')->nullable();
+            $table->string('archivo')->nullable();
             $table->timestamps();
         });
     }
