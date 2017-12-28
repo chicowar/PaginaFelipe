@@ -10,6 +10,7 @@ use App\Models\empresaubicacion;
 use App\Models\Grupos;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class EmpresaController extends Controller
 {
@@ -180,9 +181,10 @@ class EmpresaController extends Controller
 
       $ubicaciones = empresaubicacion::where('id_compania','=',$empresaid)->get();
 
+      $grupos = Grupos::where('id_compania','=',$empresaid)->orderby('id')->get();
 
+      return view('/Administracion/CrearTarjeta',compact('ubicaciones','grupos'));
 
-        return view('/Administracion/CrearTarjeta',compact('ubicaciones'));
     }
 
     public function MisTarjetas()
@@ -192,7 +194,13 @@ class EmpresaController extends Controller
       $abecedario=array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
       $grupos = Grupos::where('id_compania','=',$empresaid)->get();
 
-        return view('/Administracion/MisTarjetas', compact('abecedario','grupos'));
+      $empresa = Empresa::where('id_compania','=',$empresaid)->first();
+
+      $ubicaciones = empresaubicacion::where('id_compania','=',$empresaid)->get();
+
+      $grupos = Grupos::where('id_compania','=',$empresaid)->orderby('id')->get();
+
+      return view('/Administracion/MisTarjetas', compact('abecedario','ubicaciones','grupos'));
     }
 
 
@@ -343,10 +351,20 @@ class EmpresaController extends Controller
 
 
       public function Gruposshow(){
-        $grupo = new Grupos;
-        $grupos = $grupo->all();
+
+        $user = Auth::user();
+        $empresaid = $user->id_compania;
+
+  /*      $grupo = new Grupos;
+        $grupos = $grupo->where('id_compania','=',$empresaid)->get();
+*/
+
+        $grupos = Grupos::where('id_compania','=',$empresaid)->get();
+
+    /*   $grupo = new Grupos;
+        $grupos = $grupo->all();*/
         return response()->json(
-          $grupos->toArray()
+          $grupos->toarray()
         );
         }
 
@@ -385,14 +403,20 @@ class EmpresaController extends Controller
      */
     public function storeTarjeta(Request $request)
     {
-        //
+
+       //
        //return(dd($request));
        $user = new empresausuarios;
        $user->id_compania = $request->empresauid;
        $user->uid = $request->uid;
        $user->nombreusuario = $request->first_name;
+       $user->grupo = $request->eligegrupo;
        $user->save();
+
+       Session::flash('flash_message', 'Se guardo correctamente la tarjeta de: '.$request->first_name);
+
        return redirect()->action('EmpresaController@CrearTarjeta');
+
     }
 
 

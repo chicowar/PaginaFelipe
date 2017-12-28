@@ -27,7 +27,7 @@
   <!-- Text input-->
   <div class="col-lg-6 col-md-6 col-sm-6">
     <div class="form-group">
-      <label class="control-label" id="empresalabel">Da click en la imagen para cambiar</label>
+      <label class="control-label" id="empresalabel">Da click en la imagen para cambiar el logo</label>
       <a  id="archivobtn" type="button" value="Seleccionearchivo" ><output id="list"><img src="/img/companyDefault.png" alt="Compañia" height="142" width="142" class="img-rounded" id="myimg"></output></a>
       <progress id="uploader" value="0" max="100">0%</progress>
     </div>
@@ -47,6 +47,7 @@
 </form>
 
 <div class="col-lg-6 col-md-6 col-sm-6">
+
   <div class="form-group">
     <label class="control-label" ><FONT SIZE=22 color="cian">Compañ&iacute;a</FONT></label>
   </div>
@@ -56,7 +57,7 @@
 
 <form class="well form-horizontal" action="" method="post"  id="empresa_form">
   <div class="form-group">
-
+    <label class="control-label" id="empresalabel">Nombre y website de la empresa</label>
     <br>
     <label class="col-md-4 control-label">Nombre</label>
     <div class="col-md-8 inputGroupContainer">
@@ -318,7 +319,7 @@
         var storageRef = storage.ref();
         // Create a reference to the file to delete
         var borrarfile = document.getElementById('archivoname').value;
-      
+
         var desertRef = storageRef.child('Empresa/'+Empresauid+'/'+borrarfile);
 
         // Delete the file

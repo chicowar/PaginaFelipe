@@ -1,11 +1,43 @@
 $(document).ready(function() {
-$('#tarjetaForm').bootstrapValidator({
+/*
+  $('#tarjetaForm').on('submit',function(e){
+  e.preventDefault();
+
+  alert('aquiestoy');
+NuevaTarjetax();
+  });
+*/
+  $('#tarjetaForm').bootstrapValidator({
  // To use feedback icons, ensure that you use Bootstrap v3.1.0 or later
+
  feedbackIcons: {
      valid: 'glyphicon glyphicon-ok',
      invalid: 'glyphicon glyphicon-remove',
      validating: 'glyphicon glyphicon-refresh'
  },
+ submitHandler: function(validator, form, submitButton) {
+
+event.preventDefault();
+
+NuevaTarjetax();
+
+    $('#tarjetaForm').data('bootstrapValidator').resetForm();
+
+
+
+
+/*
+    var bv = form.data('bootstrapValidator');
+    // Use Ajax to submit form data
+    $.post(form.attr('action'), form.serialize(), function(result) {
+        console.log(result);
+    }, 'json');
+
+*/
+
+
+
+},
  fields: {
      first_name: {
          validators: {
@@ -43,6 +75,19 @@ $('#tarjetaForm').bootstrapValidator({
 
          }
      },
+     whatsapp: {
+         validators: {
+
+             stringLength: {
+                       min: 10,
+                       max: 10,
+                       message: 'El numero debe ser a 10 digitos o dejar vacio si no se desea utilizar whatsapp'
+                   },
+
+
+         }
+     },
+
      puesto: {
          validators: {
               stringLength: {
@@ -54,34 +99,25 @@ $('#tarjetaForm').bootstrapValidator({
              }
          }
      },
-     ubicacionselect: {
-         validators: {
-             notEmpty: {
-                 message: 'Es necesario guardes la ubicacion de la empresa en el formulario de empresa para continuar.'
-             }
-         }
-     },
+
 
 
      }
  })
- .on('success.form.bv', function(e) {
-   alert('bootstrap');
-/*     $('#success_message').slideDown({ opacity: "show" }, "slow") // Do something ...
-         $('#contact_form').data('bootstrapValidator').resetForm();
+        .on('success.form.bv', function(e) {
+            // Prevent form submission
+            e.preventDefault();
 
-     // Prevent form submission
-     e.preventDefault();
+            // Get the form instance
+            var $form = $(e.target);
 
-     // Get the form instance
-     var $form = $(e.target);
+            // Get the BootstrapValidator instance
+            var bv = $form.data('bootstrapValidator');
 
-     // Get the BootstrapValidator instance
-     var bv = $form.data('bootstrapValidator');
-
-     // Use Ajax to submit form data
-    $.post($form.attr('action'), $form.serialize(), function(result) {
-         console.log(result);
-     }, 'json');*/
- });
+/*
+            // Use Ajax to submit form data
+            $.post($form.attr('action'), $form.serialize(), function(result) {
+                // ... Process the result ...
+            }, 'json');*/
+        });
 });

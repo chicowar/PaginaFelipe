@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\User;
 use App\Models\Empresa;
+use App\Models\Grupos;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+
 
 class RegisterController extends Controller
 {
@@ -66,6 +68,11 @@ class RegisterController extends Controller
 
             Empresa::create([
               'id_compania' => $data['id_compania'],
+            ]);
+
+            Grupos::create([
+              'grupo' =>  'Sin grupo',
+              'id_compania' => $data['id_compania']
             ]);
 
         return User::create([

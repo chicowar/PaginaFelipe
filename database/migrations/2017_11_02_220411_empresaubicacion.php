@@ -13,8 +13,7 @@ class Empresaubicacion extends Migration
      */
     public function up()
     {
-        //
-        //
+
         Schema::create('empresaubicacions', function (Blueprint $table) {
             $table->increments('id')->unique();
             $table->integer('id_empresas');
@@ -23,7 +22,6 @@ class Empresaubicacion extends Migration
             $table->string('detalle');
             $table->float('lat');
             $table->float('lng');
-            $table->string('detalle');
             $table->timestamps();
         });
     }
@@ -35,7 +33,6 @@ class Empresaubicacion extends Migration
      */
     public function down()
     {
-        //
         Schema::dropIfExists('empresaubicacions');
     }
 }
