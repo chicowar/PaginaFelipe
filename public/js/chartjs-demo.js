@@ -13,7 +13,142 @@ $(document).ready(function(){
 
 arbol();
 
-  });
+
+$("#ubicacionselect").change(function() {
+  //$('#proveedor').val('0').find('option[value="0"]‌​').remove();
+  //$("#ubicacionselect option[value='']").remove();
+
+  $('#ubicacion').val($('#ubicacionselect option:selected').text());
+
+  var id = $('#ubicacionselect').val();
+  var route = "/storetarjeta/ubicacionget/"+ $('#ubicacionselect').val();
+
+  $.get(route, function(res){
+
+    $('#lat').val(res.lat);
+
+    $('#lng').val(res.lng);
+
+    });
+ });
+
+
+
+
+
+$('#tarjetaForm').bootstrapValidator({
+// To use feedback icons, ensure that you use Bootstrap v3.1.0 or later
+
+feedbackIcons: {
+   valid: 'glyphicon glyphicon-ok',
+   invalid: 'glyphicon glyphicon-remove',
+   validating: 'glyphicon glyphicon-refresh'
+},
+submitHandler: function(validator, form, submitButton) {
+
+event.preventDefault();
+
+EditaTarjetax();
+
+  $('#tarjetaForm').data('bootstrapValidator').resetForm();
+
+
+/*
+  var bv = form.data('bootstrapValidator');
+  // Use Ajax to submit form data
+  $.post(form.attr('action'), form.serialize(), function(result) {
+      console.log(result);
+  }, 'json');
+
+*/
+
+
+},
+fields: {
+   first_name: {
+       validators: {
+               stringLength: {
+               min: 2,
+               message: 'Es necesario ingresar el nombre'
+           },
+               notEmpty: {
+               message: 'Es necesario ingresar el nombre'
+           }
+       }
+   },
+
+   email: {
+       validators: {
+           notEmpty: {
+               message: 'Es necesario ingresar el correo electronico'
+           },
+           emailAddress: {
+               message: 'Por favor ingresa una direccion de correo valida'
+           }
+       }
+   },
+   phone: {
+       validators: {
+           notEmpty: {
+               message: 'Por favor ingresa un numero de telefono a 10 digitos'
+           },
+           stringLength: {
+                     min: 10,
+                     max: 10,
+                     message: 'El telefono debe ser a 10 digitos (lada + numero)'
+                 },
+
+
+       }
+   },
+   whatsapp: {
+       validators: {
+
+           stringLength: {
+                     min: 10,
+                     max: 10,
+                     message: 'El numero debe ser a 10 digitos o dejar vacio si no se desea utilizar whatsapp'
+                 },
+
+
+       }
+   },
+
+   puesto: {
+       validators: {
+            stringLength: {
+               min: 2,
+               message: 'Es necesario ingresar el puesto'
+           },
+           notEmpty: {
+               message: 'Es necesario ingresar el puesto'
+           }
+       }
+   },
+
+
+
+   }
+})
+      .on('success.form.bv', function(e) {
+          // Prevent form submission
+          e.preventDefault();
+
+          // Get the form instance
+          var $form = $(e.target);
+
+          // Get the BootstrapValidator instance
+          var bv = $form.data('bootstrapValidator');
+
+/*
+          // Use Ajax to submit form data
+          $.post($form.attr('action'), $form.serialize(), function(result) {
+              // ... Process the result ...
+          }, 'json');*/
+      });
+});
+
+
 
 
 function  imagenuser(id,imagen){
@@ -57,7 +192,6 @@ function  imagenuser(id,imagen){
   img2.src = url;
   }).catch(function(error) {
     // Handle any errors
-
     // Create a reference with an initial file path and name
     var storage = firebase.storage();
     // Create a reference from a Google Cloud Storage URI
@@ -69,7 +203,7 @@ function  imagenuser(id,imagen){
     // Or inserted into an <img> element:
     var img = document.getElementById('imagenuser');
     img.src = url;
-    
+
     var img2 = document.getElementById('myimg');
     img2.src = url;
     }).catch(function(error) {
@@ -152,8 +286,8 @@ function obtenernuevo (usuarios){
   var getusuario = firebase.database().ref('usuarios/'+usuarios);
   getusuario.on('value', function(datos) {
     // llenamos datos de la tarjeta
-    $("#puesto").empty();
-    $("#puesto").append(datos.val().puesto);
+    $("#puestou").empty();
+    $("#puestou").append(datos.val().puesto);
     $("#nombreu").empty();
     $("#nombreu").append(datos.val().username);
     $("#ubicau").empty();
@@ -181,6 +315,24 @@ function obtenernuevo (usuarios){
     $("#puesto").val(datos.val().puesto);
     $("#email").val(datos.val().email);
     $("#phone").val(datos.val().phone);
+    $("#enviadas").val(datos.val().enviadas);
+    $("#recibidas").val(datos.val().recibidas);
+    $("#favoritas").val(datos.val().favoritas);
+
+
+
+
+
+    if(datos.val().whatsapp.length > 0)
+    {
+     $("#imagen_de_perfil").val(datos.val().imagen_de_perfil);
+    }
+    else {
+      $("#imagen_de_perfil").val();
+    }
+
+
+
     if(datos.val().whatsapp.length > 0)
     {
      $("#whatsapp").val(datos.val().whatsapp);
@@ -317,3 +469,199 @@ function cierramodal()
   $("#editatarjeta").toggle();
 
 }
+
+
+
+
+
+         function EditaTarjetax(){
+
+           // nuevo codigo
+           // detenemos submit
+
+           event.preventDefault();
+
+
+           var formulario = document.getElementById("tarjetaForm");
+
+
+          // se creo el login de firebase obtenemos el uid
+
+
+             var uploader = document.getElementById('uploader');
+             var file =  $('#files')[0].files[0]
+             var validafile = $('#files').val();
+
+             if(validafile != ''){
+               var filename = file.name;
+             }
+             else {
+               var filename = ''
+             }
+
+
+
+            // validar si se cargo archivo
+            // si no se carga imagen en el formulario
+            // no se ejecuta el codigo hasta el mensaje else de imagen
+
+             if(validafile != '')
+             {
+
+               var storageRef = firebase.storage().ref('usuarios/'+$("#uid").val()+'/'+filename);
+               var task = storageRef.put(file);
+               task.on('state_changed', function progress(snapshot) {
+                 var percentage = (snapshot.bytesTransferred/snapshot.totalBytes)*100;
+                 uploader.value = percentage;
+
+               }, function error(err) {
+              // si se genera error al cargar el archivo da mensaje de error y elimina login de firebase
+
+                 setTimeout(function() {
+                         toastr.options = {
+                             closeButton: true,
+                             progressBar: true,
+                             showMethod: 'slideDown',
+                             timeOut: 5000
+                         };
+                         toastr.error('Verifica la imagen cargada', 'Error en carga de archivo');
+
+                     }, 0);
+
+                 return false;
+
+               },function complete() {
+                 console.log('se guardo archivo');
+                 setTimeout(function() {
+                         toastr.options = {
+                             closeButton: true,
+                             progressBar: true,
+                             showMethod: 'slideDown',
+                             timeOut: 5000
+                         };
+                         toastr.success('Guardada imagen de tarjeta', 'Carga de imagen correcta');
+
+                     }, 0);
+               });
+
+
+
+               // equivale al else imagen
+               // aqui entra si ya se genero el login en firebase
+               // y se guardo correctamente el archivobt
+               // aqui se genera el nodo de la tarjeta
+               firebase.database().ref('usuarios/'+$("#uid").val()).update({
+                 username: $('#Nombre').val(),
+                 email: $('#email').val(),
+                 phone: $('#phone').val(),
+                 puesto: $('#puesto').val(),
+                 ubicacion: $('#ubicacion').val(),
+                 lat:  $('#lat').val(),
+                 lng:  $('#lng').val(),
+                 imagen_de_perfil : filename,
+                 empresauid: $('#empresauid').val(),
+                 whatsapp: $('#whatsapp').val(),
+                 Enviadas: $("#enviadas").val(),
+                 Recibidas: $("#recibidas").val(),
+                 Favoritas: $("#favoritas").val(),
+                 Publico: 1,
+                 grupo: $('#eligegrupomod').val(),
+                 id: $("#uid").val(),
+
+
+             }).catch(function(error) {
+               console.log('error al crear nodo');
+                 //Handle error
+                 // aqui entra si se genero un error al crear el nodo de tarjeta en firebase
+                 // se debe borrar el archivo
+                 // se debe borrar el login
+
+
+             });
+
+           formulario.submit();
+
+             }
+
+
+             else {
+
+               // equivale al else imagen
+               // la unica diferencia es que no genera nodo imagen_de_perfil para evitar errores en la app
+               // aqui entra si ya se genero el login en firebase
+               // y se guardo correctamente el archivobt
+               // aqui se genera el nodo de la tarjeta
+               firebase.database().ref('usuarios/'+$("#uid").val()).update({
+                 username: $('#Nombre').val(),
+                 email: $('#email').val(),
+                 phone: $('#phone').val(),
+                 puesto: $('#puesto').val(),
+                 ubicacion: $('#ubicacion').val(),
+                 lat:  $('#lat').val(),
+                 lng:  $('#lng').val(),
+                 empresauid: $('#empresauid').val(),
+                 whatsapp: $('#whatsapp').val(),
+                 Enviadas: $("#enviadas").val(),
+                 Recibidas: $("#recibidas").val(),
+                 Favoritas: $("#favoritas").val(),
+                 Publico: 1,
+                 grupo: $('#eligegrupomod').val(),
+                 id: $("#uid").val(),
+
+
+             }).catch(function(error) {
+               console.log('error al crear nodo');
+                 //Handle error
+                 // aqui entra si se genero un error al crear el nodo de tarjeta en firebase
+                 // se debe borrar el archivo
+                 // se debe borrar el login
+
+
+
+
+
+             });
+
+           formulario.submit();
+}
+
+
+}
+
+
+$('#archivobtn').click(function () {
+    $("#files").click();
+});
+
+function archivo(evt) {
+      var files = evt.target.files; // FileList object
+
+        //Obtenemos la imagen del campo "file".
+      for (var i = 0, f; f = files[i]; i++) {
+           //Solo admitimos imágenes.
+           if (!f.type.match('image.*')) {
+                continue;
+           }
+
+           var reader = new FileReader();
+
+           reader.onload = (function(theFile) {
+               return function(e) {
+               // Creamos la imagen.
+                      document.getElementById("list").innerHTML = ['<img height="142" width="142" class="img-rounded" src="', e.target.result,'" title="', escape(theFile.name), '"/>'].join('');
+               };
+           })(f);
+
+           reader.readAsDataURL(f);
+       }
+}
+
+document.getElementById('files').addEventListener('change', archivo, false);
+
+     function uniqid() {
+         var ts=String(new Date().getTime()), i = 0, out = '';
+         for(i=0;i<ts.length;i+=2) {
+            out+=Number(ts.substr(i, 2)).toString(36);
+         }
+         return ('t'+out);
+         }

@@ -28,6 +28,7 @@ Route::get('/MisTarjetas', 'EmpresaController@MisTarjetas')->name('MisTarjetas')
 Route::get('/usuarioAdmin', 'EmpresaController@usuarioAdmin')->name('usuarioAdmin');
 Route::get('/Pago', 'EmpresaController@Pago')->name('Pago');
 Route::post('/guardarregistro','homecontroller@guardaregistro')->name('guardaregsitro');
+Route::post('/editTarjeta', 'EmpresaController@editTarjeta')->name('editTarjeta');
 
 //grupos
 Route::post('/grupo/store', 'EmpresaController@storegrupo')->name('storegrupo');

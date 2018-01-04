@@ -364,7 +364,8 @@ setTimeout(function() {
                  Recibidas: 0,
                  Favoritas: 0,
                  Publico: 1,
-                 grupo: $('#eligegrupo').val()
+                 grupo: $('#eligegrupo').val(),
+                 id: user.uid
 
 
              }).catch(function(error) {
@@ -467,8 +468,8 @@ setTimeout(function() {
                  Recibidas: 0,
                  Favoritas: 0,
                  Publico: 1,
-                 grupo: $('#eligegrupo').val()
-
+                 grupo: $('#eligegrupo').val(),
+                 id: user.uid
 
              }).catch(function(error) {
                console.log('error al crear nodo');
@@ -598,139 +599,6 @@ setTimeout(function() {
 
 }
 
-
-/*
-
-            // else de carga de imagen
-             else {
-
-               // aqui entra si ya se genero el login en firebase
-               // y se guardo correctamente el archivobt
-               // aqui se genera el nodo de la tarjeta
-               firebase.database().ref('usuarios/'+user.uid).set({
-                 username: $('#Nombre').val(),
-                 email: $('#email').val(),
-                 phone: $('#phone').val(),
-                 puesto: $('#puesto').val(),
-                 ubicacion: $('#ubicacion').val(),
-                 lat:  $('#lat').val(),
-                 lng:  $('#lng').val(),
-                 imagen_de_perfil : file.name,
-                 empresauid: $('#empresauid').val(),
-                 whatsapp: $('#whatsapp').val(),
-                 Enviadas: 0,
-                 Recibidas: 0,
-                 Favoritas: 0,
-                 Publico: 1
-
-
-             }).catch(function(error) {
-                 //Handle error
-                 // aqui entra si se genero un error al crear el nodo de tarjeta en firebase
-                 // se debe borrar el login
-                   //se borra authenticacion
-
-
-                   admin.auth().deleteUser(user.uid)
-                   .then(function() {
-
-                     // aqui entra si hubo error en la carga del archivo
-                     // y si pudo  borrarse el archivo
-                     console.log("Successfully deleted user");
-
-                     setTimeout(function() {
-                             toastr.options = {
-                                 closeButton: true,
-                                 progressBar: true,
-                                 showMethod: 'slideDown',
-                                 closeMethod: 'fadeOut',
-                                 timeOut: 4000
-                             };
-                             toastr.error('Error al guardar la tarjeta verifica tus datos', 'Error de firebase');
-
-                         }, 0);
-
-                     return false;
-                 })
-                 .catch(function(error) {
-                   // si se genera un error al borrar el usuario de firebase
-                   setTimeout(function() {
-                           toastr.options = {
-                               closeButton: true,
-                               progressBar: true,
-                               showMethod: 'slideDown',
-                               closeMethod: 'fadeOut',
-                               timeOut: 4000
-                           };
-                           toastr.error('Error al guardar la tarjeta verifica tus datos', 'Error de firebase');
-
-                       }, 0);
-
-                   return false;
-                 });
-
-
-
-             });
-
-
-           formulario.submit();
-
-
-             }
-
-
-           }).catch(function(error) {
-           // Handle Errors here.
-         // si hay error al crear el login avisa por que
-         // catch de login
-
-           switch(error.message) {
-               case 'The email address is badly formatted.':
-               setTimeout(function() {
-                       toastr.options = {
-                           closeButton: true,
-                           progressBar: true,
-                           showMethod: 'slideDown',
-                           timeOut: 5000
-                       };
-                       toastr.error('Inserta una direccion de correo valida', 'Error en formato de correo electronico');
-                   }, 0);
-                   break;
-               case 'The email address is already in use by another account.':
-               setTimeout(function() {
-                       toastr.options = {
-                           closeButton: true,
-                           progressBar: true,
-                           showMethod: 'slideDown',
-                           closeMethod: 'fadeOut',
-                           timeOut: 5000
-                       };
-                       toastr.error('Esta direccion de correo ya existe en BU, es necesario crear nueva tarjeta', 'Usuario ya existe');
-                   }, 0);
-                   break;
-               default:
-               setTimeout(function() {
-                       toastr.options = {
-                           closeButton: true,
-                           progressBar: true,
-                           showMethod: 'slideDown',
-                           closeMethod: 'fadeOut',
-                           timeOut: 5000
-                       };
-                       toastr.error(error.message, error.code);
-
-                   }, 0);
-           }
-
-
-           return Result = false;
-           // ...
-         });
-// fin de funcion
-}
-
-*/
 
      function uniqid() {
          var ts=String(new Date().getTime()), i = 0, out = '';

@@ -420,6 +420,25 @@ class EmpresaController extends Controller
     }
 
 
+    public function editTarjeta(Request $request)
+    {
+
+       //return(dd($request));
+       empresausuarios::where('uid',$request->uid)
+       ->update(['nombreusuario' => $request->first_name,
+                 'grupo' => $request->eligegrupomod]);
+
+       Session::flash('flash_message', 'Se edito correctamente la tarjeta de: '.$request->first_name);
+
+       return redirect()->action('EmpresaController@MisTarjetas');
+
+    }
+
+
+
+
+
+
     /**
      * obtiene latitud y longitud.
      *

@@ -15,7 +15,7 @@
     <div class="row">
   <div class="col-sm-3 col-md-3 col-lg-3">
         <div class="nav-side-menu">
-            <div class="brand">Brand Logo</div>
+            <div class="brand">x</div>
             <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content"></i>
             <div class="menu-list">
                 <ul id="menu-content" class="menu-content collapse out">
@@ -33,18 +33,18 @@
 
                     </ul>
                     -->
-                </ul>
+                 </ul>
             </div>
         </div>
   </div>
 <div class="col-sm-8 col-md-9 col-lg-9">
   <div class="col-md-12">
   <div class="contact-box" data-toggle="tooltip" data-placement="top" title="Da click para editar">
-                   <a id="myLink" href="#" onclick="abremodal();">
+                   <a id="myLink" href="#"  data-toggle="modal" data-target="#editatarjeta">
                    <div class="col-sm-4">
                        <div class="text-center">
                          <img id="imagenuser" alt="image" class="img-circle m-t-xs img-responsive" src="/img/profile-icon-1.png">
-                         <div class="m-t-xs font-bold" id="puesto" ></div>
+                         <div class="m-t-xs font-bold" id="puestou" ></div>
                          <input type="text" name="recibidas" id = "recibidas" value="" style="display: none;" >
                          <input type="text" name="Enviadas" id = "Enviadas" value="" style="display: none;" >
                        </div>
@@ -124,12 +124,12 @@
       <div class="" style="overflow-y: scroll; max-height:100%;  margin-top: 50px; margin-bottom:50px;">
           <div class="modal-content animated flipInX">
               <div class="modal-header">
-                  <button type="button" class="close" onclick="cierramodal();"><span aria-hidden="true"><bold>&times;</bold></span><span class="sr-only">Close</span></button>
+                  <button type="button" class="close" data-dismiss="modal" onclick="cierramodal();"><span aria-hidden="true"><bold>&times;</bold></span><span class="sr-only">Close</span></button>
                 <legend>Editar Tarjeta</legend>
               </div>
               <div class="modal-body">
 
-                <form role="form" data-toggle="validator"class="well form-horizontal" action="" method="post"  id="tarjetaForm">
+                <form role="form" data-toggle="validator"class="well form-horizontal" action="/editTarjeta" method="post"  id="tarjetaForm">
                 <fieldset>
                   {{ csrf_field() }}
 
@@ -142,9 +142,12 @@
                   <input type="text" id="lat" name="lat" value="" style="display:none;" />
                   <input type="text" id="lng" name="lng" value="" style="display:none;" />
                   <input type="text" id="uid" name="uid" value="" style="display:none;" />
+                  <input type="text" id="enviadas" name="enviadas" value="" style="display:none;" />
+                  <input type="text" id="recibidas" name="recibidas" value="" style="display:none;" />
+                  <input type="text" id="favoritas" name="favoritas" value="" style="display:none;" />
+                  <input type="text" id="imagen_de_perfil" name="imagen_de_perfil" value="" style="display:none;" />
 
                 <!-- Form Name -->
-
 
                 <!-- Text input-->
 
@@ -176,7 +179,7 @@
                     <div class="col-md-4 inputGroupContainer">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-                  <input name="email" placeholder="E-Mail" id="email" class="form-control"  type="text" required>
+                  <input name="email" placeholder="E-Mail" id="email" class="form-control"  type="text" disabled>
                     </div>
                   </div>
                 </div>
