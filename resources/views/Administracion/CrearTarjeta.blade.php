@@ -48,6 +48,7 @@ setTimeout(function() {
   <input type="text" id="lat" name="lat" value="" style="display:none;" />
   <input type="text" id="lng" name="lng" value="" style="display:none;" />
   <input type="text" id="uid" name="uid" value="" style="display:none;" />
+  <input type="date" id="vencimiento" name="vencimiento" value="{{ $vencimiento }}" style="display:none;" />
 
 <!-- Form Name -->
 <legend>Crear Usuario de Tarjeta</legend>
@@ -199,7 +200,6 @@ setTimeout(function() {
         var id = $('#ubicacionselect').val();
         var route = "/storetarjeta/ubicacionget/"+ $('#ubicacionselect').val();
 
-
         $.get(route, function(res){
 
           $('#lat').val(res.lat);
@@ -208,7 +208,6 @@ setTimeout(function() {
 
           });
        });
-
 
     });
 
@@ -239,12 +238,9 @@ setTimeout(function() {
   document.getElementById('files').addEventListener('change', archivo, false);
 
 
-
   $('#archivobtn').click(function () {
       $("#files").click();
   });
-
-
 
 
 
@@ -281,7 +277,6 @@ setTimeout(function() {
              else {
                var filename = ''
              }
-
 
             // validar si se cargo archivo
             // si no se carga imagen en el formulario
@@ -365,7 +360,8 @@ setTimeout(function() {
                  Favoritas: 0,
                  Publico: 1,
                  grupo: $('#eligegrupo').val(),
-                 id: user.uid
+                 id: user.uid,
+                 vencimiento: $('#vencimiento').val()
 
 
              }).catch(function(error) {
@@ -469,7 +465,8 @@ setTimeout(function() {
                  Favoritas: 0,
                  Publico: 1,
                  grupo: $('#eligegrupo').val(),
-                 id: user.uid
+                 id: user.uid,
+                 vencimiento: $('#vencimiento').val()
 
              }).catch(function(error) {
                console.log('error al crear nodo');

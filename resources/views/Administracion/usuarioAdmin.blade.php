@@ -11,6 +11,14 @@
 </div>
 @endif
 
+@if($errors->any())
+    <div class="alert alert-warning" role="alert">
+       @foreach ($errors->all() as $error)
+          <div>{{ $error }}</div>
+      @endforeach
+    </div>
+@endif </br>
+
 <div class="container">
 
     <form class="well form-horizontal" action=" " method="post"  id="contact_form">
@@ -53,7 +61,7 @@
                           <form class="" action="/usuarios/destroy/{{ $usuarios->id }}" method="post">
                               {{ csrf_field() }}
                               {{ method_field('DELETE') }}
-                            <button type="submit" class="btn btn-danger" id="btnpro" style="font-family: Arial;" onclick="
+                            <button type="submit" class="btn btn-danger" id="btnpro1" style="font-family: Arial;" onclick="
                               return confirm('Estas seguro de eliminar el Usuario <?=$usuarios->name?>?')"><i class="fa fa-trash"></i></button>
                           </form>
                         </td>
@@ -144,7 +152,7 @@
                             <div class="modal-footer">
 
                                 <a class="btn btn-primary" id="actualizar" style="font-family: Arial;"><i class="glyphicon glyphicon-edit"></i><br>Editar</a>
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnCloseUpload"><i class="glyphicon glyphicon-remove"></i><br>Cerrar</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnCloseUpload2"><i class="glyphicon glyphicon-remove"></i><br>Cerrar</button>
                             </div>
                           </form>
                         </div>

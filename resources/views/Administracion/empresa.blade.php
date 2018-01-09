@@ -56,6 +56,7 @@
 <!-- Text input-->
 
 <form class="well form-horizontal" action="" method="post"  id="empresa_form">
+  <input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
   <div class="form-group">
     <label class="control-label" id="empresalabel">Nombre y website de la empresa</label>
     <br>
@@ -89,7 +90,8 @@
 </form>
 </div>
 
-<form class="well form-horizontal" action="/empresa/storeubicacion/1" method="post" >
+<form class="well form-horizontal" action="" method="post" >
+  <input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
 <div class="row">
   <div class="form-group">
     <label class="control-label" ><FONT SIZE=22 color="cian">Ubicaciones guardadas</FONT></label>
@@ -102,7 +104,8 @@
 
 </div>
 </form>
-<form class="well form-horizontal" action="/empresa/storeubicacion/1" method="post"  id="ubica_form">
+<form class="well form-horizontal" action="/empresa/storeubicacion" method="post"  id="ubica_form">
+  <input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
 <div class="row">
   <div class="form-group">
     <label class="control-label" ><FONT SIZE=22 color="cian">Agregar ubicaci&oacute;n de sucursal</FONT></label>
@@ -242,7 +245,7 @@
     function guardaubicacion(){
 
       var value = $("#id").val();
-      var route = "/empresa/storeubicacion/"+value+"";
+      var route = "/empresa/storeubicacion";
       var token = $("#token").val();
       var fd = new FormData(document.getElementById("ubica_form"));
 
@@ -272,7 +275,7 @@
               }
 
         },
-        error: function(){
+        error: function(err){
           setTimeout(function() {
                   toastr.options = {
                       closeButton: true,
@@ -280,7 +283,7 @@
                       showMethod: 'slideDown',
                       timeOut: 5000
                   };
-                  toastr.error('Error en la carga', 'Carga de ubicación');
+                  toastr.error('Error en la carga', 'Carga de ubicación' + err);
 
               }, 0);
         }

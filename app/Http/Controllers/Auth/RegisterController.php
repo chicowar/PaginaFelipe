@@ -75,6 +75,8 @@ class RegisterController extends Controller
               'id_compania' => $data['id_compania']
             ]);
 
+              
+
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
@@ -82,5 +84,8 @@ class RegisterController extends Controller
             //'uid' => $data['uid'],
             'id_compania' => $data['id_compania'],
         ]);
+
+
+
     }
 }

@@ -139,8 +139,8 @@
                   <input type="text" id="archivoname" name="archivoname" value="{{ Auth::user()->archivo }}" style="display:none;" />
                   <input type="text" id="tarjetaid" name="tarjetaid" value="" style="display:none;" />
                   <input type="text" id="ubicacion" name="ubicacion" value="" style="display:none;" />
-                  <input type="text" id="lat" name="lat" value="" style="display:none;" />
-                  <input type="text" id="lng" name="lng" value="" style="display:none;" />
+                  <input type="text" id="latmd" name="lat" value="" style="display:none;" />
+                  <input type="text" id="lngmd" name="lng" value="" style="display:none;" />
                   <input type="text" id="uid" name="uid" value="" style="display:none;" />
                   <input type="text" id="enviadas" name="enviadas" value="" style="display:none;" />
                   <input type="text" id="recibidas" name="recibidas" value="" style="display:none;" />

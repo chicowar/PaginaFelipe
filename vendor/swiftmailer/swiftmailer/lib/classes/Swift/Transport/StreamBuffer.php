@@ -287,6 +287,7 @@ class Swift_Transport_StreamBuffer extends Swift_ByteStream_AbstractFilterableIn
     private function establishProcessConnection()
     {
         $command = $this->params['command'];
+
         $descriptorSpec = array(
             0 => array('pipe', 'r'),
             1 => array('pipe', 'w'),

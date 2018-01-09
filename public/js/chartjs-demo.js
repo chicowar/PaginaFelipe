@@ -21,15 +21,23 @@ $("#ubicacionselect").change(function() {
   $('#ubicacion').val($('#ubicacionselect option:selected').text());
 
   var id = $('#ubicacionselect').val();
+
+  if ($('#ubicacionselect').val() == "")
+  {
+    $('#lat').val();
+
+    $('#lng').val();
+  }
+  else{
   var route = "/storetarjeta/ubicacionget/"+ $('#ubicacionselect').val();
 
   $.get(route, function(res){
 
-    $('#lat').val(res.lat);
-
-    $('#lng').val(res.lng);
+    $('#latmd').val(res.lat);
+    $('#lngmd').val(res.lng);
 
     });
+    }
  });
 
 
@@ -315,9 +323,9 @@ function obtenernuevo (usuarios){
     $("#puesto").val(datos.val().puesto);
     $("#email").val(datos.val().email);
     $("#phone").val(datos.val().phone);
-    $("#enviadas").val(datos.val().enviadas);
-    $("#recibidas").val(datos.val().recibidas);
-    $("#favoritas").val(datos.val().favoritas);
+    $("#enviadas").val(datos.val().Enviadas);
+    $("#recibidas").val(datos.val().Recibidas);
+    $("#favoritas").val(datos.val().Favoritas);
 
 
 
@@ -363,6 +371,8 @@ function obtenernuevo (usuarios){
     {
       $('#lat').val(datos.val().lat);
       $('#lng').val(datos.val().lng);
+      $('#latmd').val(datos.val().lat);
+      $('#lngmd').val(datos.val().lng);
 
       var select = document.getElementById('ubicacionselect');
 
@@ -380,6 +390,8 @@ function obtenernuevo (usuarios){
     else {
       $('#lat').val();
       $('#lng').val();
+      $('#latmd').val();
+      $('#lngmd').val();
 
       var select = document.getElementById('ubicacionselect');
 
@@ -556,8 +568,8 @@ function cierramodal()
                  phone: $('#phone').val(),
                  puesto: $('#puesto').val(),
                  ubicacion: $('#ubicacion').val(),
-                 lat:  $('#lat').val(),
-                 lng:  $('#lng').val(),
+                 lat:  $('#latmd').val(),
+                 lng:  $('#lngmd').val(),
                  imagen_de_perfil : filename,
                  empresauid: $('#empresauid').val(),
                  whatsapp: $('#whatsapp').val(),
@@ -597,8 +609,8 @@ function cierramodal()
                  phone: $('#phone').val(),
                  puesto: $('#puesto').val(),
                  ubicacion: $('#ubicacion').val(),
-                 lat:  $('#lat').val(),
-                 lng:  $('#lng').val(),
+                 lat:  $('#latmd').val(),
+                 lng:  $('#lngmd').val(),
                  empresauid: $('#empresauid').val(),
                  whatsapp: $('#whatsapp').val(),
                  Enviadas: $("#enviadas").val(),

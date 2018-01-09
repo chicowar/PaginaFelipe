@@ -11,6 +11,7 @@
         "laravel/framework": "5.5.*",
         "laravel/tinker": "~1.0",
         "oriceon/toastr-5-laravel": "dev-master",
+        "swiftmailer/swiftmailer": "^6.0",
         "twbs/bootstrap": "^3.3"
     },
     "require-dev": {

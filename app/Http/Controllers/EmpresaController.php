@@ -11,9 +11,46 @@ use App\Models\Grupos;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Carbon\Carbon;
+use App\Mail\PruebaCorreo;
+use Mail;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Mail\Message;
 
 class EmpresaController extends Controller
 {
+
+  /**
+   * Display a listing of the resource.
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function contacto()
+  {
+      return view('contacto');
+  }
+
+  /**
+   * Show the form for creating a new resource.
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function mail(Request $request)
+  {
+    Mail::send('emails.contact',$request->all(), function($msj){
+      $msj->subject('Correo de contacto');
+      $msj->to('jorge.chavez@overthetop.com.mx');
+    });
+    Session::flash('message','Enviado correctamente');
+
+  }
+
+
+
+
+
+
+
     /**
      * Display a listing of the resource.
      *
@@ -183,7 +220,9 @@ class EmpresaController extends Controller
 
       $grupos = Grupos::where('id_compania','=',$empresaid)->orderby('id')->get();
 
-      return view('/Administracion/CrearTarjeta',compact('ubicaciones','grupos'));
+      $vencimiento = Carbon::now(-5)->addMonth()->todatestring();
+
+      return view('/Administracion/CrearTarjeta',compact('ubicaciones','grupos','vencimiento'));
 
     }
 
@@ -221,19 +260,48 @@ class EmpresaController extends Controller
 
     public function Pago()
     {
+      $today = Carbon::now(-5)->todatestring();
 
-      return view('/Administracion/Pago');
+
+      return view('/Administracion/Pago',compact('today'));
     }
 
     protected function createAdmin(Request $request)
     {
-       $user = new User;
 
-       $user->name = $request->input('name');
-       $user->email = $request->input('email');
-       $user->password = bcrypt($request->input('password'));
-       $user->id_compania = $request->input('empresauid');
-       $user->save();
+
+      $v = \Validator::make($request->all(), [
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:users',
+        'password' => 'required|string|min:6',
+      ],[
+    'email.unique' => 'Ya existe un usuario con ese correo, cambia de correo.',
+]);
+
+//return(dd($v->errors()));
+
+     if ($v->fails())
+      {
+
+        return redirect()->back()->withInput()->withErrors($v->errors());
+
+      }
+
+       $usr = new User;
+       $usr->name = $request->input('name');
+       $usr->email = $request->input('email');
+       $usr->password = bcrypt($request->input('password'));
+       $usr->id_compania = $request->input('empresauid');
+       $usr->save();
+
+        $id = $usr->id;
+
+        $user = User::find($id);
+
+
+        $Users = Auth::user();
+        //$admins= user::where
+        Mail::to($Users)->send(new PruebaCorreo($user));
 
        return redirect('/usuarioAdmin');
     }
@@ -281,7 +349,7 @@ class EmpresaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function storeubicacion($id,Request $request)
+    public function storeubicacion(Request $request)
     {
         //
         //return(dd($request));
@@ -290,6 +358,15 @@ class EmpresaController extends Controller
 
         $tablaempresa= Empresa::where('id_compania','=',$empresaid)->first();
 
+        if($request->detalle == null)
+        {
+          $detail = "";
+        }
+        else {
+          $detail = $request->detalle;
+        }
+
+
         $empresaubicacion = new empresaubicacion;
         $empresaubicacion->id_empresas = $tablaempresa->id;
         $empresaubicacion->id_compania = $empresaid;
@@ -297,7 +374,7 @@ class EmpresaController extends Controller
         $empresaubicacion->detalle = $request->detalle;
         $empresaubicacion->lat = $request->lat;
         $empresaubicacion->lng = $request->lng;
-        $empresaubicacion->detalle = $request->detalle;
+        $empresaubicacion->detalle = $detail;
 
         $empresaubicacion->save();
 
@@ -412,6 +489,8 @@ class EmpresaController extends Controller
        $user->nombreusuario = $request->first_name;
        $user->grupo = $request->eligegrupo;
        $user->save();
+
+
 
        Session::flash('flash_message', 'Se guardo correctamente la tarjeta de: '.$request->first_name);
 
