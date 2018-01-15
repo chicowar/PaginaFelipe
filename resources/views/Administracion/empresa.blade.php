@@ -177,20 +177,12 @@
 
       img.src = url;
 
+
       }).catch(function(error) {
         // Handle any errors
       });
     }
 
-    function updatefirebase(userId){
-      firebase.database().ref('Users/' + userId).set({
-         username: 'jona',
-         email: 'Super',
-         profile_picture : 'cayoquen'
-       });
-
-       console.log(2);
-    }
 
 
     function guardarnombre(){
@@ -343,9 +335,10 @@
     }, function error(err) {
 
 
-    },function complete() {
+    },function complete(snapshot) {
 
     });
+
     });
 
 

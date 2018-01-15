@@ -14,66 +14,20 @@
 
 
 
-
-use App\Mail\DemoMail;
-
-Route::get('enviar', ['as' => 'enviar', function () {
-
-
-
-//  require_once '/vendor/autoload.php';
-
-  // Create the Transport
-  $transport = (new Swift_SmtpTransport('mailtrap.io', 2525))
-    ->setUsername('f281feb954e867')
-    ->setPassword('2c2278fda855c8')
-  ;
-
-  // Create the Mailer using your created Transport
-  $mailer = new Swift_Mailer($transport);
-
-  // Create a message
-  $message = (new Swift_Message('Wonderful Subject'))
-    ->setFrom(['john@doe.com' => 'John Doe'])
-    ->subject([''])
-    ->setTo(['jorge.chavez@overthetop.com.mx', 'jchavzr@gmail.com' => 'xx'])
-    ->setBody('Hola mundo')
-    ;
-
-    // Send the message
-    $result = $mailer->send($message);
-
-
-// Sendmail
-$transport = new Swift_SendmailTransport('/usr/sbin/sendmail -bs');
-
-
 /*
-  $email = Auth::user()->email;
-  Mail::to($email)->send(new DemoMail());
+Route::get('job',function(){
+    dispatch(new App\Jobs\SendEmail);
+    return "listo";
+});
 */
-/*
-    $data = ['link' => 'http://styde.net'];
 
-    \Mail::send('emails.prueba', $data, function ($message) {
-
-        $message->from('email@styde.net', 'Styde.Net');
-
-        $message->to('user@example.com')->subject('Notificación');
-
-    });
-*/
-    return "Se envío el email";
-}]);
-
-
+Route::get('/firebase', 'FirebaseController@index');
 
 Route::get('/', function () {
     return view('/auth/login');
 });
 
 Auth::routes();
-
 
 
 //Rutas para vistas del usuario

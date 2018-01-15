@@ -7,12 +7,15 @@
     "require": {
         "php": ">=7.0.0",
         "fideloper/proxy": "~3.3",
+        "geckob/firebase": "^0.1.2",
         "genealabs/laravel-maps": "^0.5.0",
+        "kreait/firebase-php": "3.0",
         "laravel/framework": "5.5.*",
         "laravel/tinker": "~1.0",
         "oriceon/toastr-5-laravel": "dev-master",
         "swiftmailer/swiftmailer": "^6.0",
-        "twbs/bootstrap": "^3.3"
+        "twbs/bootstrap": "^3.3",
+        "kreait/firebase-php": "^3.0"
     },
     "require-dev": {
         "filp/whoops": "~2.0",

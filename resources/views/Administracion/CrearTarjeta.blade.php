@@ -35,6 +35,7 @@ setTimeout(function() {
 <div class="container">
   <div class="row">
 
+
 <form role="form" data-toggle="validator"class="well form-horizontal" action="/storeTarjeta" method="post"  id="tarjetaForm">
 <fieldset>
   {{ csrf_field() }}
@@ -48,7 +49,7 @@ setTimeout(function() {
   <input type="text" id="lat" name="lat" value="" style="display:none;" />
   <input type="text" id="lng" name="lng" value="" style="display:none;" />
   <input type="text" id="uid" name="uid" value="" style="display:none;" />
-  <input type="date" id="vencimiento" name="vencimiento" value="{{ $vencimiento }}" style="display:none;" />
+  <input type="text" id="vencimiento" name="vencimiento" value="{{ $vencimiento }}" style="display:none;" />
 
 <!-- Form Name -->
 <legend>Crear Usuario de Tarjeta</legend>
@@ -164,7 +165,6 @@ setTimeout(function() {
 
 </div>
 
-
 <!-- Success message -->
 <div class="alert alert-success" role="alert" id="success_message">Success <i class="glyphicon glyphicon-thumbs-up"></i> Thanks for contacting us, we will get back to you shortly.</div>
 
@@ -210,6 +210,12 @@ setTimeout(function() {
        });
 
     });
+
+  // termina documenta ready
+
+
+
+
 
 
     function archivo(evt) {
@@ -344,6 +350,10 @@ setTimeout(function() {
                // aqui entra si ya se genero el login en firebase
                // y se guardo correctamente el archivobt
                // aqui se genera el nodo de la tarjeta
+
+               var d = new Date($('#vencimiento').val())
+
+
                firebase.database().ref('usuarios/'+user.uid).set({
                  username: $('#Nombre').val(),
                  email: $('#email').val(),
@@ -361,7 +371,8 @@ setTimeout(function() {
                  Publico: 1,
                  grupo: $('#eligegrupo').val(),
                  id: user.uid,
-                 vencimiento: $('#vencimiento').val()
+                 creacion: -1 * d.getTime(),
+                 vencimiento: (d.getTime() + 2678400000)
 
 
              }).catch(function(error) {
@@ -450,6 +461,12 @@ setTimeout(function() {
                // aqui entra si ya se genero el login en firebase
                // y se guardo correctamente el archivobt
                // aqui se genera el nodo de la tarjeta
+
+               var d = new Date($('#vencimiento').val())
+
+               var e = - 1 * d.getTime();
+
+
                firebase.database().ref('usuarios/'+user.uid).set({
                  username: $('#Nombre').val(),
                  email: $('#email').val(),
@@ -466,7 +483,8 @@ setTimeout(function() {
                  Publico: 1,
                  grupo: $('#eligegrupo').val(),
                  id: user.uid,
-                 vencimiento: $('#vencimiento').val()
+                 creacion:  -1 * d.getTime(),
+                 vencimiento: (d.getTime() + 2678400000)
 
              }).catch(function(error) {
                console.log('error al crear nodo');

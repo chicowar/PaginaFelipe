@@ -12,10 +12,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
-use App\Mail\PruebaCorreo;
+use App\Mail\AdminCreado;
 use Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Mail\Message;
+
+use App\Events\TarjetaWasCreated;
+
+
 
 class EmpresaController extends Controller
 {
@@ -212,6 +216,7 @@ class EmpresaController extends Controller
     public function CrearTarjeta()
     {
 
+
       $user = Auth::user();
       $empresaid = $user->id_compania;
       $empresa = Empresa::where('id_compania','=',$empresaid)->first();
@@ -220,7 +225,9 @@ class EmpresaController extends Controller
 
       $grupos = Grupos::where('id_compania','=',$empresaid)->orderby('id')->get();
 
-      $vencimiento = Carbon::now(-5)->addMonth()->todatestring();
+      $vencimiento = Carbon::now(-5)->toAtomString();
+
+
 
       return view('/Administracion/CrearTarjeta',compact('ubicaciones','grupos','vencimiento'));
 
@@ -298,12 +305,14 @@ class EmpresaController extends Controller
 
         $user = User::find($id);
 
-
         $Users = Auth::user();
         //$admins= user::where
-        Mail::to($Users)->send(new PruebaCorreo($user));
 
-       return redirect('/usuarioAdmin');
+      Mail::Queue(new AdminCreado($request));
+
+
+
+        return redirect('/usuarioAdmin');
     }
 
     public function editU($id){
@@ -491,8 +500,13 @@ class EmpresaController extends Controller
        $user->save();
 
 
-
        Session::flash('flash_message', 'Se guardo correctamente la tarjeta de: '.$request->first_name);
+
+       $user = Auth::user();
+
+       $tarjeta = $request->all();
+
+       event(new TarjetaWasCreated($tarjeta,$user->email));
 
        return redirect()->action('EmpresaController@CrearTarjeta');
 

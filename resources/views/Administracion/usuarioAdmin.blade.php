@@ -41,11 +41,11 @@
                   <table width="100%" class="table table-responsive table-striped table-bordered table-hover" id="tblUsers">
                     <thead style='background-color: #868889; color:#FFF'>
                       <tr>
-                        <th>  <div class="th-inner sortable both">    Nombre  </div></th>
-                        <th>  <div class="th-inner sortable both">    Email  </div></th>
+                        <th>  <div class="th-inner sortable both"><h3>    Nombre  </h3></div></th>
+                        <th>  <div class="th-inner sortable both"><h3>    Email </h3> </div></th>
 
-                        <th>  <div class="th-inner sortable both">    Modificar  </div></th>
-                        <th>  <div class="th-inner sortable both">    Eliminar  </div></th>
+                        <th>  <div class="th-inner sortable both"><h3>   Modificar  </h3></div></th>
+                        <th>  <div class="th-inner sortable both"><h4>   Eliminar </h3> </div></th>
                       </tr>
                     </thead>
                     <!-- aqui va la consulta a la base de datos para traer las filas se hace desde el controlador-->
@@ -61,8 +61,9 @@
                           <form class="" action="/usuarios/destroy/{{ $usuarios->id }}" method="post">
                               {{ csrf_field() }}
                               {{ method_field('DELETE') }}
-                            <button type="submit" class="btn btn-danger" id="btnpro1" style="font-family: Arial;" onclick="
-                              return confirm('Estas seguro de eliminar el Usuario <?=$usuarios->name?>?')"><i class="fa fa-trash"></i></button>
+
+                            <button type="submit" class="btn btn-danger" id="btnpro<?=$usuarios->id?>" style="font-family: Arial;" onclick="
+                              return confirm('Estas seguro de eliminar el Usuario <?=$usuarios->name?>?')" <?php if(Auth::user()->id == $usuarios->id  ){echo(' disabled="disabled" data-toggle="tooltip" data-placement="top" title="No es posible borrar el usuario con el que se esta loggeado" ');}?>><i class="fa fa-trash"></i></button>
                           </form>
                         </td>
                       </tr>

@@ -1,5 +1,5 @@
 @component('mail::message')
-# E-mail de prueba
+# Confirmacion de usuario admin Creado
 
 Hola , Esto es un correo de prueba.
 

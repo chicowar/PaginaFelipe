@@ -8,6 +8,10 @@ use App\Models\Grupos;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use App\Mail\BienvenidaBU;
+use Mail;
+use Illuminate\Mail\Message;
+
 
 
 class RegisterController extends Controller
@@ -75,7 +79,9 @@ class RegisterController extends Controller
               'id_compania' => $data['id_compania']
             ]);
 
-              
+
+
+        Mail::to($data['email'])->send(new BienvenidaBU($data));
 
         return User::create([
             'name' => $data['name'],

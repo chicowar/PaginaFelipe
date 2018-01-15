@@ -13,8 +13,9 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'App\Events\Event' => [
-            'App\Listeners\EventListener',
+        'App\Events\TarjetaWasCreated' => [
+            'App\Listeners\SendTarjetaCreadaAdmin',
+            'App\Listeners\SendTarjetaCreadaUser',
         ],
     ];
 

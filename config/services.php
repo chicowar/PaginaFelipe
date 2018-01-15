@@ -34,10 +34,26 @@ return [
         'key' => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
     ],
-    
+
     'google' => [
         'maps' => [
             'api-key' => env('GOOGLE_MAPS_API_KEY'),
         ],
     ],
+
+    'firebase' => [
+     "apiKey" => "AIzaSyD7fnd4lstP7klHMW8kpGFAtI0iYWWcodg", // Only used for JS integration
+     "authDomain" => "felipe-29121.firebaseapp.com", // Only used for JS integration
+     "databaseURL" => "https://felipe-29121.firebaseio.com",
+     'secret' => "Ukl7V5gUVzUhHiATKEjAiRnvibqxKuhUY28VWELS",
+     "project_id" => "felipe-29121",
+     "projectId" => "felipe-29121",
+     "storageBucket" => "felipe-29121.appspot.com", // Only used for JS integration
+     "messagingSenderId" => "428661649011",
+     "client_email" => "beyou.solyfel@gmail.com",
+     "client_id" => "",
+     "private_key" => ""
+
+
+      ]
 ];
