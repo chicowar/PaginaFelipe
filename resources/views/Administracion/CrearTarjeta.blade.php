@@ -372,7 +372,8 @@ setTimeout(function() {
                  grupo: $('#eligegrupo').val(),
                  id: user.uid,
                  creacion: -1 * d.getTime(),
-                 vencimiento: (d.getTime() + 2678400000)
+                 vencimiento: (d.getTime() + 2678400000),
+                 bloqueo: 0
 
 
              }).catch(function(error) {
@@ -484,7 +485,8 @@ setTimeout(function() {
                  grupo: $('#eligegrupo').val(),
                  id: user.uid,
                  creacion:  -1 * d.getTime(),
-                 vencimiento: (d.getTime() + 2678400000)
+                 vencimiento: (d.getTime() + 2678400000),
+                 bloqueo: 0
 
              }).catch(function(error) {
                console.log('error al crear nodo');

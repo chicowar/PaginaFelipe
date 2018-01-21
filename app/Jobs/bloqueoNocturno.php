@@ -1,53 +1,43 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Jobs;
 
-use Illuminate\Console\Command;
+use Illuminate\Bus\Queueable;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\ServiceAccount;
 use Kreait\Firebase;
+
 use Carbon\Carbon;
-use App\Mail\tarjetaBloqueadaUsr;
-use Mail;
-use Illuminate\Mail\Message;
 
-
-class BloqueaVencidos extends Command
+class bloqueoNocturno implements ShouldQueue
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'bloquea:vencidos';
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Bloquea los usuarios que estan vencidos';
-
-    /**
-     * Create a new command instance.
+     * Create a new job instance.
      *
      * @return void
      */
     public function __construct()
     {
-        parent::__construct();
+        //
     }
 
     /**
-     * Execute the console command.
+     * Execute the job.
      *
-     * @return mixed
+     * @return void
      */
     public function handle()
     {
-        //
-        // js basa sus fechas en el 01 jun 1970 a las 0:00:00
-       // carbon tambien basa sus fechas en el 01 jun 1970 a las 0:00:00
+      //
+      // js basa sus fechas en el 01 jun 1970 a las 0:00:00
+      // carbon tambien basa sus fechas en el 01 jun 1970 a las 0:00:00
 
        $today = ((Carbon::now(-5)->timestamp) * 1000);
 
@@ -57,9 +47,6 @@ class BloqueaVencidos extends Command
        //return(dd($amonthago));
 
        $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/felipe-29121-firebase-adminsdk-pdax3-dfcd8673d9.json');
-       //$serviceAccount = ServiceAccount::fromJsonFile('../Http/Controllers/felipe-29121-firebase-adminsdk-pdax3-dfcd8673d9.json');
-
-
        $firebase = (new Factory)
            ->withServiceAccount($serviceAccount)
            ->create();
@@ -76,14 +63,12 @@ class BloqueaVencidos extends Command
        foreach($reference->getvalue() as $ref) {
 
        $uid = $ref['id'];
-       if($ref['bloqueo'] != 1)
-      {
+
        $database->getReference('usuarios/'.$uid) // this is the root reference
         ->update($bloqueo);
 
-
-       Mail::Queue(new tarjetaBloqueadaUsr($ref));
-      }
        }
+
+
     }
 }

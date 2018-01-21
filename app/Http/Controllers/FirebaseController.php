@@ -6,6 +6,9 @@ use Carbon\Carbon;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\ServiceAccount;
 use Kreait\Firebase;
+use Mail;
+use Illuminate\Mail\Message;
+use App\Mail\tarjetaBloqueadaUsr;
 
 use Illuminate\Http\Request;
 
@@ -35,7 +38,24 @@ class FirebaseController extends Controller
   $reference = $database->getReference('usuarios')->orderByChild('vencimiento')->startAt($amonthago)->endAt($today)
   ->getSnapshot();
 
-  return(dd($reference));
+  $bloqueo = [
+    'bloqueo' => 1,
+  ];
+
+  foreach($reference->getvalue() as $ref) {
+
+  $uid = $ref['id'];
+
+  if($ref['bloqueo'] != 1)
+ {
+  $database->getReference('usuarios/'.$uid) // this is the root reference
+   ->update($bloqueo);
+
+
+  Mail::Queue(new tarjetaBloqueadaUsr($ref));
+ }
+
+  }
 
 }
 
