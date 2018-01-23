@@ -1,0 +1,83 @@
+
+
+.qode_content_slider .flex-direction-nav .flex-prev, .qode_content_slider .flex-direction-nav .flex-next{
+    box-shadow: -3px 5px 66px 0px rgba(0, 0, 0, 0.1);
+}
+.q_icon_with_title.tiny .icon_holder img{
+    width: 40px;
+    border-radius: 50%;
+    box-shadow: 0 0 25px 0px rgba(40, 151, 245, 0.3);
+    margin-top: 8px;
+}
+.wpcf7-form span.cf7-star {
+    color: #f14033
+}
+
+.call_to_action {
+    box-shadow: -3px 5px 66px 0px rgba(242, 120, 13, 0.2)
+}
+
+.subtitle{
+max-width: 60%;
+margin: 0 auto;
+margin-top: 23px;
+}
+
+.header_top .left .q_icon_list{
+    display: inline-block;
+    margin-bottom: 0;
+    margin-top: 7px;
+    margin-right: 10px;
+}
+
+.header_top .right #menu-heder-top-menu{
+    margin-top: 7px;
+}
+
+.header-widget.widget_nav_menu{
+    padding: 0;
+}
+@media screen and (min-width: 1000px) {
+.header_bottom .container_inner {
+    background: #fff;
+}
+.header_bottom .container_inner.clearfix:before {
+    background: #fff;
+    content: "";
+    display: block;
+    height: 100%;
+    left: -30px;
+    position: absolute;
+    top: 0;
+    width: 30px;
+}
+.header_bottom .container_inner.clearfix:before{
+border-radius:5px 0 0 5px;
+}
+.header_inner_right:after{
+border-radius:0 5px 5px 0;
+}
+.header_inner_right:after {
+    background: #fff;
+    content: "";
+    display: block;
+    height: 100%;
+    right: -30px;
+    position: absolute;
+    top: 0;
+    width: 30px;
+}
+}
+footer .qode-instagram-feed{
+padding-right: 25%;
+}
+
+@media only screen and (max-width: 1200px){
+footer .qode-instagram-feed{
+padding-right: 0;
+}
+}
+.header-widget.widget_nav_menu ul.menu li a:hover{
+    opacity: 0.8;
+    color: #fff!important
+}

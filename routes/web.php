@@ -24,7 +24,8 @@ Route::get('job',function(){
 Route::get('/firebase', 'FirebaseController@index');
 
 Route::get('/', function () {
-    return view('/auth/login');
+//    return view('/auth/login');
+return view('welcome0');
 });
 
 Auth::routes();
