@@ -100,13 +100,16 @@
                             <li><a href="{{ route('login') }}">Login</a></li>
                             <li><a href="{{ route('register') }}">Registrarse</a></li>
                         @else
-                            <li><a href="{{ route('usuarioAdmin') }}">Usuarios Administrativos</a></li>
+
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                     {{ Auth::user()->name }} <span class="glyphicon glyphicon-cog"></span>
                                 </a>
 
                                 <ul class="dropdown-menu" role="menu">
+                                  <li><a href="{{ url('/') }}">Bandeja habilita</a></li>
+                                    <li>
+                                  <li><a href="{{ route('usuarioAdmin') }}">Usuarios Administrativos</a></li>
                                     <li>
                                       <a href="{{ url('/Empresa') }}">
                                         Mi Empresa

@@ -63,3 +63,5 @@ Route::post('empresa/storeubicacion','EmpresaController@storeubicacion')->name('
 Route::get('/empresa/ubicaciondelete/{id}','EmpresaController@ubicaciondelete')->name('ubicaciondelete');
 
 Route::get('/gmaps', ['as ' => 'gmaps', 'uses' => 'EmpresaController@map']);
+
+ //Route::get('/dfd1z141c1l0', ['as ' => 'usuarioSuperAdmin', 'uses' => 'usuarioSuperAdmin']);

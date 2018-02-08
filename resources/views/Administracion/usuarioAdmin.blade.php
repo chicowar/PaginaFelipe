@@ -98,16 +98,16 @@
                         <div class="row">
                           <div class="col-lg-12 col-md-12 col-sm-12">
                               <label style="font-weight: bold">(*) Nombre:</label>
-                              <input type="text" class="form-control" id="name" name="name" required=""/>
+                              <input type="text" class="form-control" id="name" name="name" required="" value="{{ old('name') }}"/>
                           </div>
 
                             <div class="col-lg-12 col-md-12 col-sm-12">
                                 <label style="font-weight: bold">(*) Correo:</label>
-                                <input type="text" class="form-control" id="email" name="email" required=""/>
+                                <input type="text" class="form-control" id="email" name="email" required="" value="{{ old('email') }}"/>
                             </div>
                             <div class="col-lg-12 col-md-12 col-sm-12">
                                 <label style="font-weight: bold">(*) Contraseña: &nbsp;&nbsp;&nbsp;</label><input type="checkbox" tabindex="500" id="chkVerPassword" onclick="mostrarpas()"/><span style="font-size:12px">Ver</span>
-                                <input type="password" class="form-control" id="password" name="password" required=""/>
+                                <input type="password" class="form-control" id="password" name="password" required="" value="{{ old('email') }}"/>
                             </div>
                             <input type="text" id="empresauid" name="empresauid" value="{{ Auth::user()->id_compania }}" style="display:none;" />
 
